@@ -35,17 +35,22 @@ public class Analyse
 		 * probably get the amplitude first and then the fftsamplesize will be determined depending on the intensity of the sound
 		 * 
 		 * */
+		if (audioBytes == null)
+		{
+			return 0;
+		}
+		
 		int bps = waveH.getBitsPerSample() / 8; //bits per sample = 16 divided by 8 = 2 bytes per sample
 		int samples = audioBytes.length / bps; //samples = 2048 / 2 = 1024 samples
 		fftSampleSize = samples; //fft = 1024
 		numFreqUnit = fftSampleSize / 2; //frequency unit = 512
-		Log.d("numFreqUnit", String.valueOf(numFreqUnit));
+		//Log.d("numFreqUnit", String.valueOf(numFreqUnit));
 		Wave wav = new Wave(waveH, audioBytes);
 		
 		Spectrogram spectrogram = wav.getSpectrogram(2048, 1); //Try changing the fftsample size to 1024 or 2048 (java error)
-		Log.d("FPS", String.valueOf(spectrogram.getFramesPerSecond()));
-		Log.d("Total frams", String.valueOf(spectrogram.getNumFrames()));
-		Log.d("wav timeStamp: ", wav.timestamp());
+		//Log.d("FPS", String.valueOf(spectrogram.getFramesPerSecond()));
+		//Log.d("Total frams", String.valueOf(spectrogram.getNumFrames()));
+		//Log.d("wav timeStamp: ", wav.timestamp());
 		double [][] data = spectrogram.getAbsoluteSpectrogramData();
 		double [][] normalized = normalizeSpectrogram(data);
 		double [] spectrum = normalized[0];

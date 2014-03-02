@@ -4,15 +4,22 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.musicg.wave.Wave;
 import com.musicg.wave.WaveHeader;
 
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.media.AudioTimestamp;
+import android.media.AudioTrack;
 import android.util.Log;
 
 
 public class DetectThread extends Thread
 {
+	protected Wave wave;
+	protected AudioTimestamp audioTime;
+	
 	private CaptureThread ct;
 	private Analyse analyzer;
 	private WaveHeader wh;
@@ -71,8 +78,9 @@ public class DetectThread extends Thread
 		wh.setBitsPerSample(bps);
 		wh.setSampleRate(ar.getSampleRate());
 		
-		analyzer = new Analyse(wh);
+		wave = new Wave();
 		
+		analyzer = new Analyse(wh);
 	}
 	
 	public void start()
@@ -86,30 +94,84 @@ public class DetectThread extends Thread
 		_thread = null;
 	}
 	
+	protected double getAverageLoudness(byte [] data)
+	{
+		int frameSize = ct.getFrameSize();
+		int z = 0;
+		short y = 0;
+		double x = 0.0f;
+		
+		for (int i = 0; i < frameSize; i+=2)
+		{
+			y = (short)(data[i] | data[i + 1] << 8);
+			z += Math.abs(y);
+		}
+		x = z / frameSize / 2;
+		
+		return x;	
+	}
+	
+	private byte [] convertByte(byte [] original)
+	{
+		//Log.d("Buffer length before", String.valueOf(original.length));
+		byte [] convert = original;
+		int frameSize = ct.getFrameSize();
+		int z = 0;
+		short y = 0;
+		double x = 0.0f;
+		for (int i = 0; i < frameSize; i+=2)
+		{
+			y = (short) ((convert[i]) | convert[i + 1] << 8);
+			z += Math.abs(y);
+		}
+		x = z / frameSize / 2; //average absolute value
+		
+		//Log.d("Buffer length after", String.valueOf(convert.length));
+		if (x < 30) //check if there is input available
+		{
+			return null;
+		}
+		else
+			return convert;
+	}
+	
 	public void run()
 	{
 		try
 		{
 			double frequency = 0.0;
-			byte [] buffer;
+			byte [] buffer = new byte[4096];
 			//String note = "hello";
-			
+			int buffSize = 0;
 			Thread t = Thread.currentThread();
 			while(_thread == t)
 			{
 				
 				buffer = ct.getFrameByte();
+				//buffSize += buffer.length;
+				//Log.d("Buff size", String.valueOf(buffSize));
+				//if (buffer != null)
+				//{
+					//Log.d("Buff size", String.valueOf(buffer.length));
 				
-				
-				if (buffer != null)
+				if(getAverageLoudness(buffer) > 30)
 				{
 					frequency = analyzer.robustFrequency(buffer);
-					note = closestNote(frequency);
+					
+					if (frequency > 0)
+					{
+						note = closestNote(frequency);
 					//note = closestNote(analyzer.robustFrequency(buffer));
-					Log.d("Note", note);
-					if (!note.equals("hello"))
-						 onDetected();
+						Log.d("Note", note);
+					
+						if (!note.equals("hello"))
+						{
+							onDetected();
+						}
+					}
+					
 				}
+				//}
 				//else
 					//Log.d("Buffer","no buffer");
 				
@@ -128,17 +190,13 @@ public class DetectThread extends Thread
 		double val = 0, x;
 		double dist;
 		String s = "hello";
-		
-		
-			
-		while (f < 261.6)
+	
+		while (f < 257)
 			f = f * 2.0;
 		
 		while (f > 783.9)
 			f = f * 0.5;
-		
-		
-		
+
 		
 		for (Enumeration<Double> e = notes.elements(); e.hasMoreElements();)
 		{

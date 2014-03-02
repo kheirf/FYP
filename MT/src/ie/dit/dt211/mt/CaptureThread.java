@@ -8,13 +8,14 @@
 
 package ie.dit.dt211.mt;
 
+
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
 public class CaptureThread extends Thread
 {
-	
+	private long startTime;
 	protected int buffSize;
 	private AudioRecord audioRec;
 	private int channelConf = AudioFormat.CHANNEL_IN_MONO; //single channel
@@ -31,9 +32,7 @@ public class CaptureThread extends Thread
 		buffSize = AudioRecord.getMinBufferSize(sampleRate, channelConf, encoding);
 		audioRec = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConf, encoding, buffSize);
 		buffer = new byte[frameSize];
-		
-		
-		
+		startTime = 0;
 	}
 	
 	public AudioRecord getAudioRecord()
@@ -41,13 +40,20 @@ public class CaptureThread extends Thread
 		return audioRec;
 	}
 	
+	public long getStartTime()
+	{
+		return startTime;
+	}
+	
 	//method to start recording
 	public void startRecord()
 	{
-		try{
+		try
+		{
+			startTime = System.nanoTime();
 			audioRec.startRecording();
 			flag = true;
-			}
+		}
 		catch (Exception e){
 			e.printStackTrace();}
 	}
@@ -55,11 +61,14 @@ public class CaptureThread extends Thread
 	//method to stop recording
 	public void stopRecord()
 	{
-		try{
+		try
+		{
 			audioRec.stop();
 			flag = false;
 		}
-		catch(Exception e){
+		
+		catch(Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -68,24 +77,13 @@ public class CaptureThread extends Thread
 	public byte [] getFrameByte()
 	{
 		audioRec.read(buffer, 0, frameSize); //write the recorded audio data to "buffer" array, starting from 0, and with 2042 size
+		return buffer;
 		
-		//convert 2 bytes into single value
-		int z = 0;
-		short y = 0;
-		double x = 0.0f;
-		for (int i = 0; i < frameSize; i+=2)
-		{
-			y = (short) ((buffer[i]) | buffer[i + 1] << 8);
-			z += Math.abs(y);
-		}
-		x = z / frameSize / 2; //average absolute value
-		
-		if (x < 30) //check if there is input available
-		{
-			return null;
-		}
-		else
-			return buffer;
+	}
+	
+	public int getFrameSize()
+	{
+		return frameSize;
 	}
 	
 	//method to check the progress

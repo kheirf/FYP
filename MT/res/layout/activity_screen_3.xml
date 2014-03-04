@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="1" 
+    tools:context=".Screen_3" >
+
+    <TableRow
+        android:layout_width="fill_parent"
+    	android:layout_height="match_parent"
+       	android:background="#777777"
+       	android:gravity="center_horizontal"
+       	 >
+       	
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_margin="5dp"
+            android:textSize="19sp"
+            android:typeface="serif"
+            android:textColor="#FFFFFF"
+            android:text="@string/create_header" />
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+    	android:layout_height="match_parent"
+       	android:background="#DDDDDD" >
+
+		<TextView
+		    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="16sp" 
+            android:typeface="serif"
+ 			android:textStyle="bold"
+            android:text="@string/compositionTitle"/>
+    </TableRow>
+        
+    <TableRow 
+        android:padding="2dp"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent" >
+
+        <EditText
+            android:id="@+id/title"
+            android:ems="14"
+            android:hint="@string/title_hint"
+            android:inputType="text|textCapWords" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+    	android:layout_height="match_parent"
+       	android:background="#DDDDDD" >
+
+		<TextView
+		    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="16sp" 
+            android:typeface="serif"
+ 			android:textStyle="bold"
+            android:text="@string/timeSig"/>
+    </TableRow>
+    
+    <TableRow
+        android:padding="2dp"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent" >
+
+        <Spinner
+            android:gravity="center_horizontal"
+            android:id="@+id/spinner1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/meter_array"
+            android:prompt="@string/meter_array_prompt" >
+        </Spinner>
+        
+        <TextView 
+            android:id="@+id/warn"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="12sp" />
+    </TableRow>
+
+     <TableRow
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+       	android:background="#DDDDDD" >
+
+		<TextView
+		    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="16sp" 
+            android:typeface="serif"
+ 			android:textStyle="bold"
+            android:text="@string/tempo"/>
+    </TableRow>
+    
+    <TableRow 
+        	android:layout_width="fill_parent"
+        	android:layout_height="match_parent" >
+
+        <LinearLayout 
+            android:gravity="center"
+            android:layout_weight=".1">
+            
+            <NumberPicker
+            android:id="@+id/numberPicker1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="100dip"
+            android:orientation="horizontal" />
+        </LinearLayout>
+        
+        
+    </TableRow>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05" >
+
+            <Button
+                android:id="@+id/start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/startRec" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05" >
+
+            <Button
+                android:id="@+id/cancel1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</TableLayout>

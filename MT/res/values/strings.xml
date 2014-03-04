@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MT</string>
+    <string name="app_name">Music Transcription</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello There!</string>
-	<string name="extratext">This is my final year project, so far so bad!</string>
-	<string name="test1">Test Record</string>
-	<string name="button1">Start</string>
+    <string name="extratext">This is my final year project, so far so bad!</string>
+    <string name="test1">Test Record</string>
+    <string name="button1">Start</string>
+    <string name="title_activity_screen_1">Screen_1</string>
+    <string name="title_activity_screen_2">Screen_2</string>
+    <string name="comp_details">Composition Details</string>
+    <string name="viewScore">View</string>
+    <string name="deleteScore">Delete</string>
+    <string name="back">Back</string>
+    <string name="compositionTitle">Composition Title:</string>
+    <string name="composer">Composer:</string>
+    <string name="timestamp">Date created:</string>
+    <string name="tempo">Tempo:</string>
+    <string name="timeSig">Time Signature:</string>
+    <string name="s1Header">List of composition</string>
+    <string name="title_activity_screen_3">Screen_3</string>
+    <string name="title_hint">Title here</string>
+    
+    <string-array name="meter_array">
+        <item>Common(4&#8211;4)</item>
+        <item>2&#8211;4</item>
+    </string-array>
+    
+    <string name="meter_array_prompt">Time Signature</string>
+	<string name="create_header">Settings for composition</string>
+	<string name="startRec">Start</string>
+	<string name="cancel">Cancel</string>
 </resources>

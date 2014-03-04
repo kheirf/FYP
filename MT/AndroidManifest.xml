@@ -7,14 +7,15 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:hardwareAccelerated="true">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="ie.dit.dt211.mt.MainActivity"
             android:label="@string/app_name" >
@@ -23,6 +24,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="ie.dit.dt211.mt.Screen_1"
+            android:label="@string/title_activity_screen_1" >
+        </activity>
+        <activity
+            android:name="ie.dit.dt211.mt.Screen_2"
+            android:label="@string/title_activity_screen_2" >
+        </activity>
+        <activity
+            android:name="ie.dit.dt211.mt.Screen_3"
+            android:label="@string/title_activity_screen_3" >
         </activity>
     </application>
 

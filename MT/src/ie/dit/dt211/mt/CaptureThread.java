@@ -12,6 +12,7 @@ package ie.dit.dt211.mt;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 public class CaptureThread extends Thread
 {
@@ -30,6 +31,7 @@ public class CaptureThread extends Thread
 	{
 		//record buff size needs to be larger than the size of the frame (frameSize)
 		buffSize = AudioRecord.getMinBufferSize(sampleRate, channelConf, encoding);
+		Log.d("buffSize", String.valueOf(buffSize));
 		audioRec = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConf, encoding, buffSize);
 		buffer = new byte[frameSize];
 		startTime = 0;

@@ -57,7 +57,7 @@ public class Screen_3 extends Activity
 		
 		NumberPicker np = (NumberPicker)findViewById(R.id.numberPicker1);
 		String [] nums = {"60", "80", "120"};
-		np.setMaxValue(20);
+		np.setMaxValue(2);
 		np.setMinValue(0);
 		np.setDisplayedValues(nums);
 		np.setValue(0);
@@ -69,6 +69,21 @@ public class Screen_3 extends Activity
 			{
 				Intent intent = new Intent(Screen_3.this, Screen_1.class);
 				startActivity(intent);
+			}
+		});
+		
+		/*
+		 * 	Needs modifying
+		 * */
+		start.setOnClickListener(new View.OnClickListener() 
+		{
+			
+			@Override
+			public void onClick(View v) 
+			{
+				Intent intent = new Intent(Screen_3.this, Screen_4.class);
+				startActivity(intent);
+				
 			}
 		});
 	}

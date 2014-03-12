@@ -2,6 +2,7 @@ package ie.dit.dt211.mt;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,32 +16,33 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Screen_1 extends Activity 
+public class Screen_1 extends ListActivity 
 {
 
 	DBManager dbMgr = new DBManager(this);
 	Cursor cursor;
-	ListView list;
+	//ListView list;
+	private Button addNew;
+	private Button back;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_1);
-		
-		list = (ListView)findViewById(R.id.list);
-		Button addNew = (Button)findViewById(R.id.addButton);
-		Button back = (Button)findViewById(R.id.s1quitButton);
-		addNew.setText("New Composition");
-		back.setText("Back");
+		//list = (ListView)findViewById(R.id.list);
+		addNew = (Button)findViewById(R.id.addButton);
+		back = (Button)findViewById(R.id.s1quitButton);
+		addNew.setText("Compose");
+		back.setText("Quit");
 		
 		dbMgr.open();
 		cursor = dbMgr.getAllRows();
 		
-		list.setAdapter(new CustomAdapter(cursor, this));
+		setListAdapter(new CustomAdapter(cursor, this));
 		
-		addNew.setOnClickListener(new View.OnClickListener() {
-			
+		addNew.setOnClickListener(new View.OnClickListener() 
+		{	
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -49,15 +51,23 @@ public class Screen_1 extends Activity
 			}
 		});
 		
-		back.setOnClickListener(new View.OnClickListener() {
+		back.setOnClickListener(new View.OnClickListener() 
+		{
 			
 			@Override
 			public void onClick(View v) 
 			{
-				dbMgr.close();
-				
+				if(v == back)
+				{
+					cursor.close();
+					dbMgr.close();
+					//finish();
+				}
 			}
 		});
+		
+		
+		
 	}
 
 	@Override
@@ -93,9 +103,9 @@ public class Screen_1 extends Activity
 			// TODO Auto-generated method stub
 			data.moveToPosition(pos);
 			String [] details = {};
-			for(int i = 0; i < data.getColumnCount(); i++)
+			for(int i = 0; i < data.getCount(); i++)
 			{
-				details[i] = data.getString(i);
+				details[i] = data.getString(0);
 			}
 			return details;
 		}

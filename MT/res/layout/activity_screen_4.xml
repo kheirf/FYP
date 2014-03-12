@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <LinearLayout 
+        android:orientation="vertical"
+        android:id="@+id/S4L1"		android:layout_alignParentTop="true"	
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:minHeight="30dp"
+        android:background="@drawable/aluminum" >
+   
+        
+        
+            
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/S4L2"
+		android:layout_below="@id/S4L1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" > 
+		    
+		    <TextView
+                android:id="@+id/Draw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+     			android:gravity="center_horizontal"
+                android:text="Note here"
+                android:textSize="40sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+		android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:background="@drawable/aluminum">
+
+        <LinearLayout 
+            android:id="@+id/S4L3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp">
+            
+            <ToggleButton
+            		android:id="@+id/button1"
+            		android:textOn=""
+            		android:textOff=""
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		 />
+        </LinearLayout>
+            
+       	 		
+
+       	 <LinearLayout 
+       	     android:id="@+id/S4L4"
+       	     android:layout_centerInParent="true"
+       	     android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+       	     <TextView
+           	 	android:id="@+id/time"
+           	 	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:gravity="left"
+            	android:text="00:00"
+            	android:textSize="30sp"
+            />
+       	 </LinearLayout>
+       	 	
+    </RelativeLayout>
+
+</RelativeLayout>

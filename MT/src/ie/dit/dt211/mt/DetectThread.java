@@ -8,10 +8,8 @@ import com.musicg.wave.Wave;
 import com.musicg.wave.WaveHeader;
 
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTimestamp;
-import android.media.AudioTrack;
 import android.util.Log;
 
 
@@ -111,29 +109,7 @@ public class DetectThread extends Thread
 		return x;	
 	}
 	
-	private byte [] convertByte(byte [] original)
-	{
-		//Log.d("Buffer length before", String.valueOf(original.length));
-		byte [] convert = original;
-		int frameSize = ct.getFrameSize();
-		int z = 0;
-		short y = 0;
-		double x = 0.0f;
-		for (int i = 0; i < frameSize; i+=2)
-		{
-			y = (short) ((convert[i]) | convert[i + 1] << 8);
-			z += Math.abs(y);
-		}
-		x = z / frameSize / 2; //average absolute value
-		
-		//Log.d("Buffer length after", String.valueOf(convert.length));
-		if (x < 30) //check if there is input available
-		{
-			return null;
-		}
-		else
-			return convert;
-	}
+	
 	
 	public void run()
 	{
@@ -141,8 +117,8 @@ public class DetectThread extends Thread
 		{
 			double frequency = 0.0;
 			byte [] buffer = new byte[4096];
+			byte [] buffer2;
 			//String note = "hello";
-			int buffSize = 0;
 			Thread t = Thread.currentThread();
 			while(_thread == t)
 			{
@@ -154,7 +130,7 @@ public class DetectThread extends Thread
 				//{
 					//Log.d("Buff size", String.valueOf(buffer.length));
 				
-				if(getAverageLoudness(buffer) > 30)
+				if(getAverageLoudness(buffer) > 85) //original 30
 				{
 					frequency = analyzer.robustFrequency(buffer);
 					

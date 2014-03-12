@@ -7,6 +7,7 @@
     <string name="extratext">This is my final year project, so far so bad!</string>
     <string name="test1">Test Record</string>
     <string name="button1">Start</string>
+    <string name="button2">Cancel</string>
     <string name="title_activity_screen_1">Screen_1</string>
     <string name="title_activity_screen_2">Screen_2</string>
     <string name="comp_details">Composition Details</string>
@@ -21,14 +22,16 @@
     <string name="s1Header">List of composition</string>
     <string name="title_activity_screen_3">Screen_3</string>
     <string name="title_hint">Title here</string>
-    
+
     <string-array name="meter_array">
         <item>Common(4&#8211;4)</item>
         <item>2&#8211;4</item>
     </string-array>
-    
+
     <string name="meter_array_prompt">Time Signature</string>
-	<string name="create_header">Settings for composition</string>
-	<string name="startRec">Start</string>
-	<string name="cancel">Cancel</string>
+    <string name="create_header">Settings for composition</string>
+    <string name="startRec">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_screen_4">Screen_4</string>
+
 </resources>

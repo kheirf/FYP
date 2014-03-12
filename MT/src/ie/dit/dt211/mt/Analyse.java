@@ -47,6 +47,8 @@ public class Analyse
 		//Log.d("numFreqUnit", String.valueOf(numFreqUnit));
 		Wave wav = new Wave(waveH, audioBytes);
 		
+		Log.d("Wave length", String.valueOf(wav.getBytes().length));
+		
 		Spectrogram spectrogram = wav.getSpectrogram(2048, 1); //Try changing the fftsample size to 1024 or 2048 (java error)
 		//Log.d("FPS", String.valueOf(spectrogram.getFramesPerSecond()));
 		//Log.d("Total frams", String.valueOf(spectrogram.getNumFrames()));
@@ -66,10 +68,6 @@ public class Analyse
 		return robustFreq;
 	}
 	
-	public int getTime()
-	{
-		return t;
-	}
 	
 	private static double [][] normalizeSpectrogram(double[][] spectrogram)
 	{

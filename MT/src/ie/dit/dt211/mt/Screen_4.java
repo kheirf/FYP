@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -20,7 +22,7 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 	
 	private ToggleButton b;
 	//private Button c;
-	private boolean flag = false;
+	private boolean isPressed = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -29,21 +31,72 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_4);
 		b = (ToggleButton)findViewById(R.id.button1);
-		b.setBackgroundResource(R.drawable.recbutton);
-		//b.setBackgroundResource(R.drawable.recbutton);
-		//c = (Button)findViewById(R.id.button2);
 		
+
+		OnClickListener cl = new OnClickListener() 
+		{
+			
+			@Override
+			public void onClick(View v) 
+			{
+				if (v == b)
+				{
+					
+					isPressed = !isPressed;
+					//isPressed = true;
+					
+					if(isPressed)
+					{
+						b.setBackgroundResource(R.drawable.record);			
+						ct = new CaptureThread();
+						ct.start();
+						dt = new DetectThread(ct);
+						dt.setOnSignalsDetectedListener(Screen_4.this);
+						dt.start();
+						
+					}
+					
+					if(!isPressed)
+					{
+						b.setBackgroundResource(R.drawable.stop);
+						if(ct.progress())
+						{
+							ct.stopRecord();
+							dt.setOnSignalsDetectedListener(null);
+							try {
+								dt.stop_thread();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					
+							ct = null;
+							dt = null;
+						}
+					}
+					Log.d("IsPressed", String.valueOf(isPressed));
+					//isPressed = !isPressed;
+					//isPressed = !isPressed;
+						//setContentView(R.layout.activity_screen_4);
+				}
+					
+				
+				
+			}
+		};
 		
+		b.setOnClickListener(cl);
 		
+		/*
 		b.setOnClickListener(new View.OnClickListener() 
 		{
 			@Override
 			public void onClick(View v) 
 			{
-				if (b.isChecked())
+				if (isPressed)
 				{
+					
 					//b.setBackgroundResource(R.drawable.record);
-					flag = true;
 					//flag = true;
 					ct = new CaptureThread();
 					ct.start();
@@ -57,7 +110,7 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 				// TODO Auto-generated method stub
 				
 			}
-		});
+		});*/
 		
 		/*
 		c.setOnClickListener(new View.OnClickListener() 
@@ -78,6 +131,12 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 		});*/
 	}
 
+	
+	public void ClickEvent ()
+	{
+		
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -94,15 +153,14 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 			@Override
 			public void run() 
 			{
-				/*if (flag)
+				TextView tv = (TextView) Screen_4.this.findViewById(R.id.Draw);
+				
+				if(isPressed)
 				{
-					b.setBackgroundResource(R.drawable.record);
+					tv.setText(dt.getCurrentNote());
 				}
 				else
-					b.setBackgroundResource(R.drawable.stop);*/
-				TextView tv = (TextView) Screen_4.this.findViewById(R.id.Draw);
-				tv.setText(dt.getCurrentNote());
-				
+					tv.setText("Click button");
 			}
 		});
 		// TODO Auto-generated method stub
@@ -112,7 +170,12 @@ public class Screen_4 extends Activity implements OnSignalsDetected
 	public void onDestroy()
 	{
 		ct.stopRecord();
-		dt.stop_thread();
+		try {
+			dt.stop_thread();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.onDestroy();
 	}
 

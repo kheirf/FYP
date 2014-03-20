@@ -16,13 +16,15 @@ import android.util.Log;
 
 public class CaptureThread extends Thread
 {
+	
+	
 	private long startTime;
 	protected int buffSize;
 	private AudioRecord audioRec;
 	private int channelConf = AudioFormat.CHANNEL_IN_MONO; //single channel
 	private int encoding = AudioFormat.ENCODING_PCM_16BIT;
 	private int sampleRate = 44100; //sample rate must be large enough to determine the frequency
-	private int frameSize = 4096; /**original: 2048*/
+	private int frameSize = 4096; /**original: 4096*/
 	private boolean flag; //flag to know if recording has stopped or currently running
 	byte [] buffer;
 	
@@ -60,12 +62,15 @@ public class CaptureThread extends Thread
 			e.printStackTrace();}
 	}
 	
+	
 	//method to stop recording
 	public void stopRecord()
 	{
 		try
 		{
+			//audioRec.release();
 			audioRec.stop();
+			audioRec = null;
 			flag = false;
 		}
 		
@@ -80,7 +85,6 @@ public class CaptureThread extends Thread
 	{
 		audioRec.read(buffer, 0, frameSize); //write the recorded audio data to "buffer" array, starting from 0, and with 2042 size
 		return buffer;
-		
 	}
 	
 	public int getFrameSize()

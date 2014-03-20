@@ -1,5 +1,7 @@
 package ie.dit.dt211.mt;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -15,6 +17,8 @@ import android.util.Log;
 
 public class DetectThread extends Thread
 {
+	ByteArrayOutputStream bas;
+	
 	protected Wave wave;
 	protected AudioTimestamp audioTime;
 	
@@ -50,6 +54,7 @@ public class DetectThread extends Thread
 		notes.put("F5#", 739.98);
 		notes.put("G5", 783.9);
 		
+		bas = new ByteArrayOutputStream();
 		ct = rec;
 		AudioRecord ar = rec.getAudioRecord();
 		int bps = 0;
@@ -87,8 +92,9 @@ public class DetectThread extends Thread
 		_thread.start();
 	}
 	
-	public void stop_thread()
+	public void stop_thread() throws InterruptedException
 	{
+		onSignalsDetectedListener = null;
 		_thread = null;
 	}
 	
@@ -111,34 +117,36 @@ public class DetectThread extends Thread
 	
 	
 	
+	
+	public void collect(byte [] bb) throws IOException
+	{
+		bas.write(bb);
+	}
+	
+	
 	public void run()
 	{
 		try
 		{
 			double frequency = 0.0;
 			byte [] buffer = new byte[4096];
-			byte [] buffer2;
 			//String note = "hello";
 			Thread t = Thread.currentThread();
 			while(_thread == t)
 			{
 				
 				buffer = ct.getFrameByte();
-				//buffSize += buffer.length;
-				//Log.d("Buff size", String.valueOf(buffSize));
-				//if (buffer != null)
-				//{
-					//Log.d("Buff size", String.valueOf(buffer.length));
-				
+				collect(buffer);
+				//Log.d("Collector",String.valueOf(bas.size()));
 				if(getAverageLoudness(buffer) > 85) //original 30
 				{
 					frequency = analyzer.robustFrequency(buffer);
 					
-					if (frequency > 0)
+					//if (frequency > 0)
+					if((frequency > 257) && (frequency < 783.9))
 					{
 						note = closestNote(frequency);
-					//note = closestNote(analyzer.robustFrequency(buffer));
-						Log.d("Note", note);
+						//Log.d("Note", note);
 					
 						if (!note.equals("hello"))
 						{
@@ -147,10 +155,6 @@ public class DetectThread extends Thread
 					}
 					
 				}
-				//}
-				//else
-					//Log.d("Buffer","no buffer");
-				
 				
 				
 			}
@@ -204,7 +208,8 @@ public class DetectThread extends Thread
 	
 	private void onDetected()
 	{
-		if (onSignalsDetectedListener != null){
+		if (onSignalsDetectedListener != null)
+		{
 			onSignalsDetectedListener.onDetected();
 		}
 	}

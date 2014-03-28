@@ -4,65 +4,81 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
+    android:weightSum="1.0"
     tools:context=".Screen_1" >
 
     <LinearLayout 
+        android:id="@+id/textViewHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#777777"
-        android:gravity="center_horizontal" >
+        android:background="#555555"
+        android:layout_weight="0.025"
+        android:gravity="center" >
         
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:textSize="16sp" 
-                android:typeface="serif"
- 				android:textStyle="bold"
- 				android:textColor="#FFFFFF"
+                android:textSize="20sp" 
+ 				android:typeface="serif"
+            	android:textColor="#FFFFFF"
                 android:text="@string/s1Header"/>
  
         
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/listViewHolder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"  >
+        android:layout_height="0dp" 
+        android:layout_weight="0.97"
+        android:padding="5dp"
+         >
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
-            android:layout_height="375dp">
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
         </ListView>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buttonHolder"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
+        style="@android:style/Holo.ButtonBar"
+        android:orientation="horizontal"
+        android:weightSum="1.0" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05" >
+            android:layout_weight="0.5" >
 
             <Button
                 android:id="@+id/addButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@android:style/Holo.Light.ButtonBar"
+                 />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05" >
+            android:layout_weight="0.5"
+         
+             >
 
             <Button
                 android:id="@+id/s1quitButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@android:style/Holo.Light.ButtonBar"
+                 />
         </LinearLayout>
     </LinearLayout>
 

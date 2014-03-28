@@ -3,6 +3,7 @@ package ie.dit.dt211.mt;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,20 +15,27 @@ import android.widget.Spinner;
 
 public class Screen_3 extends Activity 
 {
-	private String timeSig;
+	String timeSig, songTitle;
+	int bps;
+	Button start, cancel;
+	EditText title;
+	Spinner meter;
+	NumberPicker np;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_3);
 		
-		Button start = (Button)findViewById(R.id.start);
-		Button cancel = (Button)findViewById(R.id.cancel1);
+		start = (Button)findViewById(R.id.start);
+		cancel = (Button)findViewById(R.id.cancel1);
 		
-		EditText title = (EditText)findViewById(R.id.title);
-		Spinner meter = (Spinner)findViewById(R.id.spinner1);
+		title = (EditText)findViewById(R.id.title);
+		meter = (Spinner)findViewById(R.id.spinner1);
 		
-		
+		songTitle = "";
+		timeSig = "4/4";
 		meter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() 
 		{
 
@@ -44,7 +52,7 @@ public class Screen_3 extends Activity
 				case 1:
 					timeSig = "2/4";
 					break;
-					default:
+				default:
 						timeSig="4/4";
 						break;		
 				}
@@ -55,35 +63,47 @@ public class Screen_3 extends Activity
 			
 		});
 		
-		NumberPicker np = (NumberPicker)findViewById(R.id.numberPicker1);
-		String [] nums = {"60", "80", "120"};
+		np = (NumberPicker)findViewById(R.id.numberPicker1);
+		final String [] nums = {"60", "80", "120"};
 		np.setMaxValue(2);
 		np.setMinValue(0);
 		np.setDisplayedValues(nums);
 		np.setValue(0);
+		bps = Integer.valueOf(nums[0]);
+		
+		np.setWrapSelectorWheel(true);
+		np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() 
+		{	
+			@Override
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) 
+			{
+				bps = Integer.valueOf(nums[newVal]);
+				Log.d("BPS",String.valueOf(bps));
+			}
+		});
 		
 		cancel.setOnClickListener(new View.OnClickListener() 
 		{
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(Screen_3.this, Screen_1.class);
+				Intent intent = new Intent(getBaseContext(), Screen_1.class);
 				startActivity(intent);
 			}
 		});
 		
-		/*
-		 * 	Needs modifying
-		 * */
 		start.setOnClickListener(new View.OnClickListener() 
 		{
 			
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(Screen_3.this, Screen_4.class);
+				songTitle = title.getText().toString();
+				Intent intent = new Intent(getBaseContext(), Screen_4.class);
+				intent.putExtra("songTitle", songTitle);
+				intent.putExtra("bps", bps);
+				intent.putExtra("timeSig", timeSig);
 				startActivity(intent);
-				
 			}
 		});
 	}

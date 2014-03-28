@@ -11,7 +11,7 @@
     <string name="title_activity_screen_1">Screen_1</string>
     <string name="title_activity_screen_2">Screen_2</string>
     <string name="comp_details">Composition Details</string>
-    <string name="viewScore">View</string>
+    <string name="viewScore">Review</string>
     <string name="deleteScore">Delete</string>
     <string name="back">Back</string>
     <string name="compositionTitle">Composition Title:</string>
@@ -22,7 +22,7 @@
     <string name="s1Header">List of composition</string>
     <string name="title_activity_screen_3">Screen_3</string>
     <string name="title_hint">Title here</string>
-
+	<string name="todo">TODO</string>
     <string-array name="meter_array">
         <item>Common(4&#8211;4)</item>
         <item>2&#8211;4</item>

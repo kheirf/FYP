@@ -1,51 +1,53 @@
 package ie.dit.dt211.mt;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.view.LayoutInflater;
+import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class Screen_1 extends ListActivity 
+public class Screen_1 extends ListActivity
 {
-
 	DBManager dbMgr = new DBManager(this);
 	Cursor cursor;
-	//ListView list;
+	ListView listV;
 	private Button addNew;
 	private Button back;
+	CustomAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_1);
-		//list = (ListView)findViewById(R.id.list);
+		listV = (ListView) findViewById(android.R.id.list);
 		addNew = (Button)findViewById(R.id.addButton);
 		back = (Button)findViewById(R.id.s1quitButton);
 		addNew.setText("Compose");
 		back.setText("Quit");
 		
 		dbMgr.open();
+		//testAddItem();
 		cursor = dbMgr.getAllRows();
+		cursor.moveToFirst();
 		
-		setListAdapter(new CustomAdapter(cursor, this));
+		adapter = new CustomAdapter(this, cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		listV.setAdapter(adapter);
+		//listV.setOnItemClickListener(adapter);
 		
 		addNew.setOnClickListener(new View.OnClickListener() 
 		{	
 			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			public void onClick(View v) 
+			{
+				cursor.close();
+				dbMgr.close();
 				Intent intent = new Intent(Screen_1.this, Screen_3.class);
 				startActivity(intent);
 			}
@@ -53,23 +55,45 @@ public class Screen_1 extends ListActivity
 		
 		back.setOnClickListener(new View.OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(View v) 
 			{
-				if(v == back)
-				{
 					cursor.close();
 					dbMgr.close();
 					//finish();
-				}
 			}
 		});
 		
 		
-		
+	}
+	
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) 
+	{
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		Cursor cursor = adapter.getCursor();
+		Log.d("Item clicked", String.valueOf(cursor.getString(0)));
+		String [] extra = new String [cursor.getColumnCount()];
+		for(int i = 0; i < cursor.getColumnCount(); i++)
+		{
+			extra[i] = cursor.getString(i);
+		}
+		Intent intent = new Intent(getBaseContext(), Screen_2.class);
+		intent.putExtra("compo_details", extra);
+		startActivity(intent);
 	}
 
+
+	public void testAddItem()
+	{
+		for(int i = 0; i < 20; i++)
+		{
+			dbMgr.insert("Test 1", "015", "80", "4/4", "data/data/ie/");
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
@@ -78,66 +102,7 @@ public class Screen_1 extends ListActivity
 		return true;
 	}
 	
-	
-	private class CustomAdapter extends BaseAdapter
-	{
-		
-		Cursor data;
-		Context context;
-		
-		CustomAdapter(Cursor c, Context ctx)
-		{
-			data = c;
-			context = ctx;
-		}
-		
-		@Override
-		public int getCount() 
-		{
-			return data.getCount();
-		}
 
-		@Override
-		public Object getItem(int pos) 
-		{
-			// TODO Auto-generated method stub
-			data.moveToPosition(pos);
-			String [] details = {};
-			for(int i = 0; i < data.getCount(); i++)
-			{
-				details[i] = data.getString(0);
-			}
-			return details;
-		}
-
-		@Override
-		public long getItemId(int pos) 
-		{
-			data.moveToPosition(pos);
-			return Long.valueOf(data.getString(0));
-		}
-
-		@Override
-		public View getView(int pos, View convertView, ViewGroup parentView) 
-		{
-			View v = convertView;
-			if (v == null)
-			{
-				LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				v = li.inflate(R.layout.list_item, null);
-			}
-			
-			ImageButton b = (ImageButton) v.findViewById(R.id.del_image);
-			TextView tv = (TextView) v.findViewById(R.id.compo_title);
-			
-			String [] s = (String[])this.getItem(pos);
-			tv.setText(s[0]);
-			b.setImageResource(R.drawable.delete);
-			
-			return v;
-		}
-	}
-	
 	public void onDestroy()
 	{
 		super.onDestroy();
@@ -151,15 +116,3 @@ public class Screen_1 extends ListActivity
 	}
 
 }
-
-
-/**
- * <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    tools:context=".Screen_1" >
-
-</RelativeLayout>
- */

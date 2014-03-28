@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" 
     tools:context=".Screen_2" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:background="#777777"
+        android:gravity="center"
+        android:background="#555555"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/compo_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="7dp"
-            android:layout_margin="5dp"
-            android:textSize="19sp"
+            android:padding="12dp"
+            android:textSize="20sp"
             android:typeface="serif"
             android:textColor="#FFFFFF"
             android:text="@string/comp_details" />
@@ -33,14 +32,15 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DDDDDD" >
+            android:padding="5dp"
+       		android:background="#222222"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textSize="16sp" 
-                android:typeface="serif"
  				android:textStyle="bold"
                 android:text="@string/compositionTitle"/>
         </TableRow>
@@ -54,49 +54,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textSize="14sp"
-                android:text="Composition number 1" />
+                android:paddingRight="10dp"
+                android:textSize="18sp" />
         </TableRow>
 
+
         <TableRow
-            android:layout_width="match_parent"
+             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DDDDDD" >
+            android:padding="5dp"
+       		android:background="#222222" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textSize="16sp" 
-                android:typeface="serif"
- 				android:textStyle="bold"
-                android:text="@string/composer"/>
-        </TableRow>
-        
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <TextView
-                android:id="@+id/compo_composer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:text="Me myself and i"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#DDDDDD" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textSize="16sp" 
-                android:typeface="serif"
  				android:textStyle="bold"
                 android:text="@string/timestamp"/>
         </TableRow>
@@ -106,26 +79,26 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/compo_timestamp"
+                android:id="@+id/compo_dateCreated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textSize="14sp"
-                android:text="03/03/04" />
+                android:paddingRight="10dp"
+                android:textSize="18sp" />
         </TableRow>
 
         
         <TableRow
-            android:layout_width="match_parent"
+             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DDDDDD" >
+            android:padding="5dp"
+       		android:background="#222222" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textSize="16sp" 
-                android:typeface="serif"
  				android:textStyle="bold"
                 android:text="@string/tempo"/>
         </TableRow>
@@ -139,22 +112,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textSize="14sp"
-                android:text="120bpm" />
+                android:paddingRight="10dp"
+                android:textSize="18sp" />
         </TableRow>
 
         
         <TableRow
-            android:layout_width="match_parent"
+             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#DDDDDD" >
+            android:padding="5dp"
+       		android:background="#222222" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textSize="16sp" 
-                android:typeface="serif"
  				android:textStyle="bold"
                 android:text="@string/timeSig"/>
         </TableRow>
@@ -168,27 +141,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                	android:padding="10dp"
-                android:textSize="14sp"
-                android:text="4-4" />
+                android:paddingRight="10dp"
+                android:textSize="18sp" />
         </TableRow>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:baselineAligned="false"
-            android:gravity="bottom"
-            android:orientation="horizontal" >
-
+            android:gravity="bottom" >
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.03" >
+                android:baselineAligned="false"
+            	android:orientation="horizontal"
+           	 	style="@android:style/Holo.ButtonBar" >
+			
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.03"
+                >
 
                 <Button
                     android:id="@+id/viewScoreButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/viewScore" />
+                    android:text="@string/viewScore"
+                     style="@android:style/Holo.Light.ButtonBar" />
             </LinearLayout>
 
             <LinearLayout
@@ -200,7 +181,8 @@
                     android:id="@+id/deleteScoreButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/deleteScore" />
+                    android:text="@string/deleteScore"
+                     style="@android:style/Holo.Light.ButtonBar" />
             </LinearLayout>
 
             <LinearLayout
@@ -212,8 +194,11 @@
                     android:id="@+id/s2backButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/back" />
+                    android:text="@string/back"
+                     style="@android:style/Holo.Light.ButtonBar" />
             </LinearLayout>
+            </LinearLayout>
+            
         </LinearLayout>
     </TableLayout>
 

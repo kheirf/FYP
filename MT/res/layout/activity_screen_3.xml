@@ -9,7 +9,7 @@
     <TableRow
         android:layout_width="fill_parent"
     	android:layout_height="match_parent"
-       	android:background="#777777"
+       	android:background="#555555"
        	android:gravity="center_horizontal"
        	 >
        	
@@ -17,34 +17,35 @@
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="7dp"
-            android:layout_margin="5dp"
-            android:textSize="19sp"
+            android:padding="12dp"
+            android:textSize="20sp"
             android:typeface="serif"
             android:textColor="#FFFFFF"
             android:text="@string/create_header" />
     </TableRow>
     
     <TableRow
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
     	android:layout_height="match_parent"
-       	android:background="#DDDDDD" >
+       	android:padding="5dp"
+       	android:background="#222222"  >
 
 		<TextView
 		    android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="16sp" 
-            android:typeface="serif"
  			android:textStyle="bold"
-            android:text="@string/compositionTitle"/>
+            android:text="@string/compositionTitle" />
+		
     </TableRow>
         
     <TableRow 
-        android:padding="2dp"
-        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        >
 
         <EditText
             android:id="@+id/title"
@@ -54,27 +55,27 @@
     </TableRow>
 
     <TableRow
+        android:padding="5dp"
         android:layout_width="fill_parent"
     	android:layout_height="match_parent"
-       	android:background="#DDDDDD" >
+    	android:background="#222222" >
 
 		<TextView
 		    android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="16sp" 
-            android:typeface="serif"
- 			android:textStyle="bold"
+            android:textStyle="bold"
             android:text="@string/timeSig"/>
     </TableRow>
     
     <TableRow
-        android:padding="2dp"
+        android:padding="5dp"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"  >
 
         <Spinner
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
             android:id="@+id/spinner1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -88,19 +89,20 @@
             android:textSize="12sp" />
     </TableRow>
 
-     <TableRow
+      <TableRow
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
-       	android:background="#DDDDDD" >
+       	android:padding="5dp"
+       	android:background="#222222"  >
 
 		<TextView
 		    android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="16sp" 
-            android:typeface="serif"
  			android:textStyle="bold"
-            android:text="@string/tempo"/>
+            android:text="@string/tempo" />
+		
     </TableRow>
     
     <TableRow 
@@ -108,27 +110,36 @@
         	android:layout_height="match_parent" >
 
         <LinearLayout 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_weight=".1">
             
             <NumberPicker
             android:id="@+id/numberPicker1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:width="100dip"
+            android:layout_width="50dip"
+            android:layout_height="110dip"
             android:orientation="horizontal" />
         </LinearLayout>
         
         
     </TableRow>
     
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="false"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
-
+        android:layout_gravity="bottom"
+         >
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:baselineAligned="false"
+	    style="@android:style/Holo.ButtonBar"
+	    android:orientation="horizontal"
+	    android:layout_gravity="bottom"
+	    android:layout_alignParentBottom="true" >
+            
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,20 +149,25 @@
                 android:id="@+id/start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/startRec" />
+                android:text="@string/startRec" 
+                style="@android:style/Holo.Light.ButtonBar" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@android:style/Holo.ButtonBar"
             android:layout_weight="0.05" >
 
             <Button
                 android:id="@+id/cancel1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel" />
+                android:text="@string/cancel"
+                style="@android:style/Holo.Light.ButtonBar" />
         </LinearLayout>
-    </LinearLayout>
+        
+        </LinearLayout>
+    </RelativeLayout>
 
 </TableLayout>

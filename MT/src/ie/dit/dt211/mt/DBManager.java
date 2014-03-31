@@ -83,7 +83,7 @@ public class DBManager
 		dbHelper.close();
 	}
 	
-	public Cursor getAllRows()
+	public Cursor getAllRowsDesc()
 	{
 		return db.query(DATABASE_TABLE, new String[]{
 				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
@@ -116,6 +116,49 @@ public class DBManager
 	public int deleteRow(long ID)
 	{
 		return db.delete(DATABASE_TABLE, KEY_ID + "=?", new String[] {Long.toString(ID)});
+	}
+	
+	
+	//Custom methods
+	public int editTitle(long ID, String title)
+	{
+		ContentValues args = new ContentValues();
+		args.put(KEY_TITLE, title);
+		return db.update(DATABASE_TABLE, args, "_id = " + String.valueOf(ID), null);
+	}
+	
+	public int countRows()
+	{
+		Cursor cursor = db.query(DATABASE_TABLE, new String[]{
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				null, null, null, null, KEY_ID + " DESC", null);
+		if(cursor.getCount() > 0)
+			return cursor.getCount();
+		
+		return 0;
+	}
+	
+	public int getHighID()
+	{
+		Cursor cursor = db.query(DATABASE_TABLE, new String[]{
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				null, null, null, null, KEY_ID + " DESC", null);
+		if(cursor.getCount() > 0)
+		{
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
+		return 0;
+	}
+	
+	public int nextAutoincrement()
+	{
+		Cursor cursor = db.rawQuery("SELECT * FROM SQLITE_SEQUENCE", null);
+		if(cursor.moveToFirst())
+			return cursor.getInt(1);
+		
+		return 0;
+		
 	}
 
 }

@@ -77,7 +77,7 @@ public class FileHandler
 	            fos = new OutputStreamWriter(fo); 
 	            fos.write(data); 
 	            fos.flush();
-	            ret = String.valueOf(ctx.getFilesDir());
+	            ret = filename;//String.valueOf(ctx.getFilesDir());
 	        } 
 	        catch (Exception e) 
 	        { e.printStackTrace();} 

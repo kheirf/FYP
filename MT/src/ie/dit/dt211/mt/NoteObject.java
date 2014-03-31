@@ -10,6 +10,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.util.Log;
 
 public class NoteObject implements Serializable
 {
@@ -39,34 +42,17 @@ public class NoteObject implements Serializable
 		this.y = calcPos(type);
 	}
 	
+	public boolean displayable()
+	{
+		if(x < -50 || x > canvasWidth + 50)
+			return false;
+		
+		return true;
+	}
+	
 	public void init()
 	{
-		InputStream bit = null;
-		try
-		{
-			bit = ctx.getAssets().open("bitmaps/note.png");
-			noteBitmap = BitmapFactory.decodeStream(bit);
-			bit = ctx.getAssets().open("bitmaps/sharp.png");
-			sharpBitmap = BitmapFactory.decodeStream(bit);
-			
-			scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
-			scaledSharpBitmap = Bitmap.createScaledBitmap(sharpBitmap, canvasWidth/15, canvasHeight/9, true);
-			
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			if(noteBitmap != null)
-			{
-				noteBitmap.recycle();
-				noteBitmap = null;
-			}
-			if(sharpBitmap != null)
-			{
-				sharpBitmap.recycle();
-				sharpBitmap = null;
-			}
-		}
+		initializeBitmap();
 		
 		multiplier.put(1, 6.0f);
 		multiplier.put(2, 6.0f);
@@ -88,6 +74,9 @@ public class NoteObject implements Serializable
 		multiplier.put(18, 1.0f);
 		multiplier.put(19, 1.0f);
 		multiplier.put(20, 0.5f);
+		
+		//scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
+		//scaledSharpBitmap = Bitmap.createScaledBitmap(sharpBitmap, canvasWidth/15, canvasHeight/9, true);
 	}
 	
 	public float getXpos()
@@ -150,10 +139,55 @@ public class NoteObject implements Serializable
 		return false;
 	}
 	
+	private void initializeBitmap()
+	{
+		InputStream bit = null;
+		noteBitmap = null;
+		sharpBitmap = null;
+		
+		try
+		{
+			
+			bit = ctx.getAssets().open("bitmaps/note.png");
+			noteBitmap = BitmapFactory.decodeStream(bit);
+			bit = ctx.getAssets().open("bitmaps/sharp.png");
+			sharpBitmap = BitmapFactory.decodeStream(bit);
+
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			if(noteBitmap != null)
+			{
+				noteBitmap.recycle();
+				noteBitmap = null;
+			}
+			if(sharpBitmap != null)
+			{
+				sharpBitmap.recycle();
+				sharpBitmap = null;
+			}
+		}
+	}
+	
 	public void draw(Canvas c)
 	{
+		if(noteBitmap == null)
+			initializeBitmap();
+		
+		scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
+		scaledSharpBitmap = Bitmap.createScaledBitmap(sharpBitmap, canvasWidth/20, canvasHeight/9, true);
+
+		if(type == 1 || type == 2)
+		{
+			Paint p = new Paint();
+			p.setARGB(255, 0, 0, 0);
+			p.setStrokeWidth(canvasHeight*0.008f);
+			c.drawLine(x - 20, canvasHeight*(0.150f * 6), x + scaledNoteBitmap.getWidth() + 20, canvasHeight*(0.150f * 6), p);
+		}
+		
 		if(isSharp(type))
-			c.drawBitmap(scaledSharpBitmap, x - scaledSharpBitmap.getWidth()/1.5f, y, null);
+			c.drawBitmap(scaledSharpBitmap, x - (scaledSharpBitmap.getWidth()/1.5f), y - 15, null);
 		
 		c.drawBitmap(scaledNoteBitmap, x, y, null);
 	}

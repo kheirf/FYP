@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class Screen_1 extends ListActivity
@@ -34,11 +35,12 @@ public class Screen_1 extends ListActivity
 		
 		dbMgr.open();
 		//testAddItem();
-		cursor = dbMgr.getAllRows();
+		cursor = dbMgr.getAllRowsDesc();
 		cursor.moveToFirst();
 		
+		
 		adapter = new CustomAdapter(this, cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		listV.setAdapter(adapter);
+		listV.setAdapter((ListAdapter) adapter);
 		//listV.setOnItemClickListener(adapter);
 		
 		addNew.setOnClickListener(new View.OnClickListener() 

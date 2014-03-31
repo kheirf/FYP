@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.sax.StartElementListener;
-import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,7 +103,7 @@ public class CustomAdapter extends CursorAdapter // implements OnItemClickListen
 		else
 			Toast.makeText(ctx, "Error. Contact Dev", Toast.LENGTH_SHORT).show();
 		
-		Cursor cursor = dbmgr.getAllRows();
+		Cursor cursor = dbmgr.getAllRowsDesc();
 		changeCursor(cursor);
 		dbmgr.close();
 	}

@@ -87,9 +87,7 @@ public class Screen_4 extends Activity implements Runnable
 				
 		b = (ToggleButton)findViewById(R.id.button1);
 		surface = (SurfaceView) findViewById(R.id.surface);
-		
 		holder = surface.getHolder();
-		
 		noteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.note);
 		restBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.rest);
 		
@@ -198,9 +196,15 @@ public class Screen_4 extends Activity implements Runnable
 	private boolean saveDataToFile()
 	{
 		String ser = FileHandler.convertObject(noteObjects);
+		Log.d("NoteObjects size", String.valueOf(noteObjects.size()));
 		if(ser != null && !ser.equalsIgnoreCase(""))
 		{
-			String dirHolder = FileHandler.write(this, ser, "saved.dat");
+			dbmgr = new DBManager(this);
+			dbmgr.open();
+			String highestID = String.valueOf(dbmgr.nextAutoincrement() + 1);
+			String dirHolder = FileHandler.write(this, ser, highestID+".dat");// + "/" + highestID + ".dat";
+			Log.d("dirHolder", dirHolder);
+			dbmgr.close();
 			if(!dirHolder.equals(""))
 			{
 				dirPath = dirHolder;
@@ -215,10 +219,12 @@ public class Screen_4 extends Activity implements Runnable
 	public void run() 
 	{
 		Canvas canvas;
+		Log.d("Valid surface", String.valueOf(holder.getSurface().isValid()));
 		Rect dimension = holder.getSurfaceFrame();
 		canvasHeight = dimension.height();
 		canvasWidth = dimension.width();
 		Bitmap background = drawStaff();
+		//Bitmap background = DrawStaff.drawStaff(canvasWidth, canvasHeight);
 		scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
 		scaledRestBitmap = Bitmap.createScaledBitmap(restBitmap, canvasWidth/15, (canvasHeight/9)/2, true);
 		

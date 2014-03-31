@@ -22,7 +22,10 @@
     <string name="s1Header">List of composition</string>
     <string name="title_activity_screen_3">Screen_3</string>
     <string name="title_hint">Title here</string>
-	<string name="todo">TODO</string>
+    <string name="todo">TODO</string>
+    <string name="title">Title:</string>
+    <string name="measure">Measure:</string>
+
     <string-array name="meter_array">
         <item>Common(4&#8211;4)</item>
         <item>2&#8211;4</item>
@@ -33,5 +36,6 @@
     <string name="startRec">Start</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_screen_4">Screen_4</string>
+    <string name="title_activity_screen_5">Screen_5</string>
 
 </resources>

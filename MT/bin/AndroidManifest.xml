@@ -26,24 +26,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name="ie.dit.dt211.mt.Screen_1"
-            android:label="@string/title_activity_screen_1" >
+            android:label="@string/title_activity_screen_1"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name="ie.dit.dt211.mt.Screen_2"
-            android:label="@string/title_activity_screen_2" >
+            android:label="@string/title_activity_screen_2"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name="ie.dit.dt211.mt.Screen_3"
-            android:label="@string/title_activity_screen_3" >
+            android:label="@string/title_activity_screen_3"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:screenOrientation="landscape"
             android:name="ie.dit.dt211.mt.Screen_4"
-            android:label="@string/title_activity_screen_4" >
+            android:label="@string/title_activity_screen_4"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="ie.dit.dt211.mt.Screen_5"
+            android:label="@string/title_activity_screen_5"
+            android:screenOrientation="landscape"  >
         </activity>
     </application>
 

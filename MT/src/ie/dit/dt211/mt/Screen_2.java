@@ -16,6 +16,8 @@ import android.widget.Toast;
 public class Screen_2 extends Activity 
 {
 	String filePath, _id, compoTitle;
+	String [] extras;
+	Bundle intentExtras = null;
 	Button review, delete, back;
 	
 	@Override
@@ -38,8 +40,8 @@ public class Screen_2 extends Activity
 		delete.setOnClickListener(new clickListener());
 		
 		
-		Bundle intentExtras = getIntent().getExtras();
-		String [] extras;
+		intentExtras = getIntent().getExtras();
+		//String [] extras;
 		if(!intentExtras.isEmpty())
 		{
 			extras = intentExtras.getStringArray("compo_details");
@@ -94,7 +96,11 @@ public class Screen_2 extends Activity
 			}
 			
 			if (v == review)
-			{}
+			{
+				Intent intent = new Intent(getBaseContext(), Screen_5.class);
+				intent.putExtra("compo_details", extras);
+				startActivity(intent);
+			}
 			
 			if (v == delete)
 			{

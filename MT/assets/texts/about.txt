@@ -1,0 +1,13 @@
+The goal of this project is to develop an application to serve as a convenient tool for aspiring music composers. 
+
+This is so that they can create and share music anywhere, anytime. 
+
+A user may suddenly came up with a tune, they would just play with their instrument or hum the tune which will be automatically notated by the app. 
+
+This application can also serve as an educational tool for individuals that want to learn about music compositions by physically interacting with real instruments.
+
+The proposed system does not do the following functionality:
+* Detect pitch from polyphonic sound signal or sound signal that has two or more melody simultaneously.
+* Users cannot create harmonic music score sheet, only melodic
+* While capturing sound, the user cannot pause and continue. Only stop option will be available.
+* Users cannot edit their composition on the application.

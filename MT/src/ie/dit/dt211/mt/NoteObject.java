@@ -11,8 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.util.Log;
 
 public class NoteObject implements Serializable
 {
@@ -28,13 +26,13 @@ public class NoteObject implements Serializable
 	float distance = 0.150f, x, y;
 	static final Hashtable<Integer, Float> multiplier = new Hashtable<Integer, Float>();
 	
-	NoteObject(Context ctx)
+	public NoteObject(Context ctx)
 	{
 		NoteObject.ctx = ctx;
 		//init();
 	}
 	
-	NoteObject(int type, int x)
+	public NoteObject(int type, int x)
 	{
 		this(ctx);
 		this.x = x;
@@ -75,8 +73,6 @@ public class NoteObject implements Serializable
 		multiplier.put(19, 1.0f);
 		multiplier.put(20, 0.5f);
 		
-		//scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
-		//scaledSharpBitmap = Bitmap.createScaledBitmap(sharpBitmap, canvasWidth/15, canvasHeight/9, true);
 	}
 	
 	public float getXpos()
@@ -152,7 +148,7 @@ public class NoteObject implements Serializable
 			noteBitmap = BitmapFactory.decodeStream(bit);
 			bit = ctx.getAssets().open("bitmaps/sharp.png");
 			sharpBitmap = BitmapFactory.decodeStream(bit);
-
+			bit.close();
 		}
 		catch(IOException e)
 		{
@@ -168,6 +164,7 @@ public class NoteObject implements Serializable
 				sharpBitmap = null;
 			}
 		}
+		
 	}
 	
 	public void draw(Canvas c)
@@ -177,7 +174,8 @@ public class NoteObject implements Serializable
 		
 		scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
 		scaledSharpBitmap = Bitmap.createScaledBitmap(sharpBitmap, canvasWidth/20, canvasHeight/9, true);
-
+		
+		
 		if(type == 1 || type == 2)
 		{
 			Paint p = new Paint();

@@ -1,20 +1,31 @@
 package ie.dit.dt211.mt;
 
-//testing github
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.Menu;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity
 {
+	int duration = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		final ImageView img = (ImageView)findViewById(R.id.image1);
+		img.setBackgroundResource(R.drawable.animation);
+
+		final AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
+		frameAnimation.start();
+		 
+		for(int i = 0; i < frameAnimation.getNumberOfFrames(); i++)
+			 duration += frameAnimation.getDuration(i);
+	
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable()
 		{
@@ -22,9 +33,9 @@ public class MainActivity extends Activity
 			public void run() 
 			{
 				finish();
-				Intent intent = new Intent(MainActivity.this, Screen_1.class);
+				Intent intent = new Intent(MainActivity.this, Screen_0.class);
 				startActivity(intent);
-			}}, 3000);
+			}}, duration + 1000);
 			
 	}
 

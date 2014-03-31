@@ -3,11 +3,9 @@ package ie.dit.dt211.mt;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterViewFlipper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -17,7 +15,7 @@ public class Screen_3 extends Activity
 {
 	String timeSig, songTitle;
 	int bps;
-	Button start, cancel;
+	Button next, cancel;
 	EditText title;
 	Spinner meter;
 	NumberPicker np;
@@ -28,7 +26,7 @@ public class Screen_3 extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_3);
 		
-		start = (Button)findViewById(R.id.start);
+		next = (Button)findViewById(R.id.s2Next);
 		cancel = (Button)findViewById(R.id.cancel1);
 		
 		title = (EditText)findViewById(R.id.title);
@@ -78,7 +76,6 @@ public class Screen_3 extends Activity
 			public void onValueChange(NumberPicker picker, int oldVal, int newVal) 
 			{
 				bps = Integer.valueOf(nums[newVal]);
-				Log.d("BPS",String.valueOf(bps));
 			}
 		});
 		
@@ -92,7 +89,7 @@ public class Screen_3 extends Activity
 			}
 		});
 		
-		start.setOnClickListener(new View.OnClickListener() 
+		next.setOnClickListener(new View.OnClickListener() 
 		{
 			
 			@Override

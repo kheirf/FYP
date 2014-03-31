@@ -48,7 +48,11 @@
         <activity
             android:name="ie.dit.dt211.mt.Screen_5"
             android:label="@string/title_activity_screen_5"
-            android:screenOrientation="landscape"  >
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="ie.dit.dt211.mt.Screen_0"
+            android:label="@string/title_activity_screen_0" >
         </activity>
     </application>
 

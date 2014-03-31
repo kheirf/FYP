@@ -25,7 +25,9 @@
     <string name="todo">TODO</string>
     <string name="title">Title:</string>
     <string name="measure">Measure:</string>
-
+    <string name="s2Next">Next</string>
+    <string name="about">About</string>
+    
     <string-array name="meter_array">
         <item>Common(4&#8211;4)</item>
         <item>2&#8211;4</item>
@@ -37,5 +39,12 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_screen_4">Screen_4</string>
     <string name="title_activity_screen_5">Screen_5</string>
+    <string name="title_activity_screen_0">Screen_0</string>
+    <string name="desc">Desc</string>
+    <string name="footnote">Kheir Fernandez | DT211</string>
+    <string name="createNewCompo">Create new composition</string>
+    <string name="listComposition">List of compositions</string>
+    <string name="quitter">Quit</string>
+    <string name="done">Done</string>
 
 </resources>

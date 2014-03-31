@@ -1,5 +1,7 @@
 package ie.dit.dt211.mt;
 
+
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -104,15 +106,19 @@ public class DetectThread extends Thread
 		try
 		{
 			double frequency = 0.0;
-			byte [] buffer = new byte[2048];
+			byte [] buffer = new byte[4096];
 			Thread t = Thread.currentThread();
 			while(_thread == t)
 			{
 				
 				buffer = ct.getFrameByte();
-				if(getAverageLoudness(buffer) > 45) //original 30
+				if(getAverageLoudness(buffer) > 50) //original 30
 				{
+					
 					frequency = analyzer.robustFrequency(buffer);
+					
+					Log.d("loudness", String.valueOf(getAverageLoudness(buffer)) );
+					
 					if((frequency > 257) && (frequency < 783.9))
 					{
 						note = closestNote(frequency);

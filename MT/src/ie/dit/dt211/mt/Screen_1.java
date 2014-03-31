@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListAdapter;
@@ -15,12 +13,12 @@ import android.widget.ListView;
 
 public class Screen_1 extends ListActivity
 {
-	DBManager dbMgr = new DBManager(this);
-	Cursor cursor;
-	ListView listV;
+	private DBManager dbMgr = new DBManager(this);
+	private Cursor cursor;
+	private ListView listV;
 	private Button addNew;
 	private Button back;
-	CustomAdapter adapter;
+	private CustomAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -31,23 +29,22 @@ public class Screen_1 extends ListActivity
 		addNew = (Button)findViewById(R.id.addButton);
 		back = (Button)findViewById(R.id.s1quitButton);
 		addNew.setText("Compose");
-		back.setText("Quit");
+		back.setText("Menu");
 		
 		dbMgr.open();
-		//testAddItem();
 		cursor = dbMgr.getAllRowsDesc();
 		cursor.moveToFirst();
 		
 		
 		adapter = new CustomAdapter(this, cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		listV.setAdapter((ListAdapter) adapter);
-		//listV.setOnItemClickListener(adapter);
 		
 		addNew.setOnClickListener(new View.OnClickListener() 
 		{	
 			@Override
 			public void onClick(View v) 
 			{
+				finish();
 				cursor.close();
 				dbMgr.close();
 				Intent intent = new Intent(Screen_1.this, Screen_3.class);
@@ -60,9 +57,11 @@ public class Screen_1 extends ListActivity
 			@Override
 			public void onClick(View v) 
 			{
-					cursor.close();
-					dbMgr.close();
-					//finish();
+				finish();
+				cursor.close();
+				dbMgr.close();
+				Intent intent = new Intent(getBaseContext(), Screen_0.class);
+				startActivity(intent);
 			}
 		});
 		
@@ -73,10 +72,8 @@ public class Screen_1 extends ListActivity
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) 
 	{
-		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		Cursor cursor = adapter.getCursor();
-		Log.d("Item clicked", String.valueOf(cursor.getString(0)));
 		String [] extra = new String [cursor.getColumnCount()];
 		for(int i = 0; i < cursor.getColumnCount(); i++)
 		{
@@ -85,15 +82,6 @@ public class Screen_1 extends ListActivity
 		Intent intent = new Intent(getBaseContext(), Screen_2.class);
 		intent.putExtra("compo_details", extra);
 		startActivity(intent);
-	}
-
-
-	public void testAddItem()
-	{
-		for(int i = 0; i < 20; i++)
-		{
-			dbMgr.insert("Test 1", "015", "80", "4/4", "data/data/ie/");
-		}
 	}
 	
 	@Override

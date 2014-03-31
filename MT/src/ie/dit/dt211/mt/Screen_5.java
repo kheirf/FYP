@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,14 +70,12 @@ public class Screen_5 extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				thread.stopThread();
+				msv.onDestroy();
 				Intent intent = new Intent(getBaseContext(), Screen_2.class);
 				intent.putExtra("compo_details", extras);
 				startActivity(intent);
 			}
 		});
-		
-		
 	}
 
 	
@@ -114,6 +111,31 @@ public class Screen_5 extends Activity
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onResume() 
+	{
+		super.onResume();
+		msv = (MySurfaceView)findViewById(R.id.surface3);
+	}
+
+
+
+	@Override
+	protected void onPause() 
+	{
+		super.onPause();
+		msv.onPause();
+	}
+
+
+
+	@Override
+	protected void onDestroy() 
+	{
+		super.onDestroy();
+		thread.stopThread();
 	}
 
 }

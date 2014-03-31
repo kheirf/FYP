@@ -1,5 +1,6 @@
 package ie.dit.dt211.mt;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -37,9 +39,7 @@ public class Screen_4 extends Activity implements Runnable
 	int bps;
 	
 	
-	//Set up the surfaceview
-	Bitmap noteBitmap, scaledNoteBitmap, restBitmap, scaledRestBitmap;
-	float distance = 0.150f;
+	private float distance = 0.150f;
 	private SurfaceView surface;
 	private SurfaceHolder holder;
 	Thread t;
@@ -87,15 +87,15 @@ public class Screen_4 extends Activity implements Runnable
 				
 		b = (ToggleButton)findViewById(R.id.button1);
 		surface = (SurfaceView) findViewById(R.id.surface);
+		
 		holder = surface.getHolder();
-		noteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.note);
-		restBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.rest);
+		//BitmapFactory.decodeResource(getResources(), R.drawable.note);
+		//BitmapFactory.decodeResource(getResources(), R.drawable.rest);
 		
 		
 		n = new NoteObject(this);
 		Log.d("BP", "Here");
 		
-		noteObjects = new ArrayList<NoteObject>();
 		
 		
 		t = new Thread(this);
@@ -224,9 +224,8 @@ public class Screen_4 extends Activity implements Runnable
 		canvasHeight = dimension.height();
 		canvasWidth = dimension.width();
 		Bitmap background = drawStaff();
-		//Bitmap background = DrawStaff.drawStaff(canvasWidth, canvasHeight);
-		scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
-		scaledRestBitmap = Bitmap.createScaledBitmap(restBitmap, canvasWidth/15, (canvasHeight/9)/2, true);
+		//scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
+		//scaledRestBitmap = Bitmap.createScaledBitmap(restBitmap, canvasWidth/15, (canvasHeight/9)/2, true);
 		
 		n.setCanvasSize(canvasWidth, canvasHeight);
 		n.init();
@@ -235,7 +234,7 @@ public class Screen_4 extends Activity implements Runnable
 		{
 			if(!holder.getSurface().isValid())
 				continue;
-			
+
 			canvas = holder.lockCanvas();
 			canvas.drawBitmap(background, 0, 0, null);
 			update();
@@ -267,9 +266,6 @@ public class Screen_4 extends Activity implements Runnable
 				}
 				noteObjects.add(new NoteObject(dt.getCurrentNote(), curXpos));
 			}
-				//while(System.currentTimeMillis()!=wait){
-				//Log.d("Breakpoint", "here");
-			//};
 		}
 		//When in rest - code goes inside else clause
 		hold = dt.getCurrentNote();
@@ -297,6 +293,9 @@ public class Screen_4 extends Activity implements Runnable
 		RectF rect;
 		rect = new RectF(0, 0, canvasWidth, canvasHeight);
 		
+		Paint paint1 = new Paint();
+		paint1.setColor(Color.rgb(196, 195, 170));
+		
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(canvasHeight*0.008f);
 		linePaint.setARGB(255, 0, 0, 0);
@@ -311,6 +310,20 @@ public class Screen_4 extends Activity implements Runnable
 		canvas.drawLine(0, canvasHeight*(distance*3), canvasWidth, canvasHeight*(distance*3), linePaint);
 		canvas.drawLine(0, canvasHeight*(distance*4), canvasWidth, canvasHeight*(distance*4), linePaint);
 		canvas.drawLine(0, canvasHeight*(distance*5), canvasWidth, canvasHeight*(distance*5) , linePaint);
+		
+		canvas.drawText("G", 30, canvasHeight * (distance*0.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("F", 5, canvasHeight * distance + (canvasHeight/53), paint1);
+		canvas.drawText("E", 30, canvasHeight * (distance*1.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("D", 5, canvasHeight * (distance*2) + (canvasHeight/53), paint1);
+		canvas.drawText("C", 30, canvasHeight * (distance*2.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("B", 5, canvasHeight * (distance*3) + (canvasHeight/53), paint1);
+		canvas.drawText("A", 30, canvasHeight * (distance*3.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("G", 5, canvasHeight * (distance*4) + (canvasHeight/53), paint1);
+		canvas.drawText("F", 30, canvasHeight * (distance*4.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("E", 5, canvasHeight * (distance*5) + (canvasHeight/53), paint1);
+		canvas.drawText("D", 30, canvasHeight * (distance*5.5f) + (canvasHeight/53), paint1);
+		canvas.drawText("G", 5, canvasHeight * (distance*6.0f) + (canvasHeight/53), paint1);
+		
 		return staff;
 	}
 	

@@ -1,5 +1,7 @@
 package ie.dit.dt211.mt;
 
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -13,12 +15,12 @@ import android.graphics.RectF;
 import android.graphics.Bitmap.Config;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.VelocityTracker;
 import android.view.View;
-import android.webkit.WebView.HitTestResult;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 {
@@ -136,11 +138,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	@Override
 	public void draw(Canvas canvas) 
 	{
+		Log.d("BP", "here");
 		canvas.drawBitmap(background, 0, 0, null);
+		
 		iterator = objects.iterator();	
 		int counter = 0;
-		boolean f = true;
-		while(iterator.hasNext() && f)
+		while(iterator.hasNext())
 		{
 			NoteObject curr = iterator.next();
 
@@ -171,8 +174,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	public Bitmap drawStaff()
 	{
 		Paint boxColor = new Paint();
-		Paint hintColor = new Paint();
-		hintColor.setARGB(255, 150, 150, 150);
 		Paint paint1 = new Paint();
 		paint1.setTextSize(canvasHeight/12);
 		paint1.setStrokeWidth(5);
@@ -182,7 +183,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		boxColor.setStyle(Paint.Style.FILL);
 		RectF rect;
 		rect = new RectF(0, 0, canvasWidth, canvasHeight);
-		
 		
 		
 		Canvas canvas = new Canvas();
@@ -210,6 +210,37 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		canvas.drawText("G", 5, canvasHeight * (distance*6.0f) + (canvasHeight/53), paint1);
 		return staff;
 	}
+	
+	public void onResume()
+	{
+		thread = new MyThread(this.getHolder(), this);
+		thread.setOkay(true);
+		thread.start();
+	}
+	
+	public void onPause()
+	{
+		thread.setOkay(false);
+		boolean b = true;
+		while(b)
+		{
+			try 
+			{
+				thread.join();
+				b = false;
+			} 
+			catch (InterruptedException e) 
+			{e.printStackTrace();}
+		}
+	}
+	
+	public void onDestroy()
+	{
+		thread.setOkay(false);
+		thread.stopThread();
+	}
+	
+	
 	
 	
 	/****************************************************************************************************
@@ -300,23 +331,22 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 		}//end of run
 
 		
-		public void onPause()
-		{
-			this.setOkay(false);
-		}
+		
 		
 		public void stopThread()
 		{
 			this.setOkay(false);
-			try 
-			{
-				this.join();
-			} 
-			catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
+
+				try 
+				{
+					this.join();
+				} 
+				catch (InterruptedException e) 
+				{e.printStackTrace();}
+			
 		}
+		
+		
 		
 	}//end of MyThread
 	

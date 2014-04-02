@@ -10,6 +10,7 @@
         android:id="@+id/button1"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:focusable="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
@@ -78,7 +79,7 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/createnew"
+            android:background="@drawable/button_select"
             android:text="@string/createNewCompo"
             android:textSize="15sp" />
 
@@ -88,7 +89,8 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/createnew"
+            android:focusable="true"
+            android:background="@drawable/button_select"
             android:text="@string/listComposition"
             android:textSize="15sp" />
 
@@ -98,7 +100,7 @@
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/createnew"
+            android:background="@drawable/button_select"
             android:text="@string/quitter"
             android:textSize="15sp" />
     </LinearLayout>

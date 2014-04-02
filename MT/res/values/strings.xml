@@ -8,8 +8,8 @@
     <string name="test1">Test Record</string>
     <string name="button1">Start</string>
     <string name="button2">Cancel</string>
-    <string name="title_activity_screen_1">Screen_1</string>
-    <string name="title_activity_screen_2">Screen_2</string>
+    <string name="title_activity_screen_1">List of previous composition</string>
+    <string name="title_activity_screen_2">Details</string>
     <string name="comp_details">Composition Details</string>
     <string name="viewScore">Review</string>
     <string name="deleteScore">Delete</string>
@@ -20,7 +20,7 @@
     <string name="tempo">Tempo:</string>
     <string name="timeSig">Time Signature:</string>
     <string name="s1Header">List of composition</string>
-    <string name="title_activity_screen_3">Screen_3</string>
+    <string name="title_activity_screen_3">Setup your composition</string>
     <string name="title_hint">Title here</string>
     <string name="todo">TODO</string>
     <string name="title">Title:</string>
@@ -37,9 +37,9 @@
     <string name="create_header">Settings for composition</string>
     <string name="startRec">Start</string>
     <string name="cancel">Cancel</string>
-    <string name="title_activity_screen_4">Screen_4</string>
-    <string name="title_activity_screen_5">Screen_5</string>
-    <string name="title_activity_screen_0">Screen_0</string>
+    <string name="title_activity_screen_4">Record ongoing</string>
+    <string name="title_activity_screen_5">Review Score</string>
+    <string name="title_activity_screen_0">Welcome!</string>
     <string name="desc">Desc</string>
     <string name="footnote">Kheir Fernandez | DT211</string>
     <string name="createNewCompo">Create new composition</string>

@@ -89,8 +89,10 @@ public class Screen_2 extends Activity
 		{
 			if (v == back)
 			{
-				Intent intent = new Intent(getBaseContext(), Screen_1.class);
-				startActivity(intent);
+				//Intent intent = new Intent(getBaseContext(), Screen_1.class);
+				//startActivity(intent);
+				onBackPressed();
+				finish();
 			}
 			
 			if (v == review)
@@ -98,6 +100,7 @@ public class Screen_2 extends Activity
 				Intent intent = new Intent(getBaseContext(), Screen_5.class);
 				intent.putExtra("compo_details", extras);
 				startActivity(intent);
+				finish();
 			}
 			
 			if (v == delete)
@@ -144,6 +147,7 @@ public class Screen_2 extends Activity
 		
 		Intent intent = new Intent(getBaseContext(), Screen_1.class);
 		startActivity(intent);
+		finish();
 	}
 
 	@Override

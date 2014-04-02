@@ -12,48 +12,52 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class Screen_4 extends Activity implements Runnable
 {
+
 	//Database manager
-	DBManager dbmgr;
+	private DBManager dbmgr;
+	String [] extras;
 	
 	//Data from previous intent
-	String songTitle, timeSig, dateTime, dirPath;
-	int bps;
+	private String songTitle, timeSig, dateTime, dirPath;
+	private int bps;
 	
 	
+	//Surface view variables for drawing
 	private float distance = 0.150f;
 	private SurfaceView surface;
 	private SurfaceHolder holder;
 	Thread t;
 	int canvasHeight = 0, canvasWidth = 0;
-	boolean locker = true;
+	boolean locker = false;
 	
 	
 	//Note objects
-	NoteObject n;
-	ArrayList<NoteObject> noteObjects;
-	Iterator<NoteObject> noteIterator1, noteIterator2;
-	int curXpos = 150;
-	int xDist = 150;
-	int hold = 0;
+	private NoteObject n;
+	private ArrayList<NoteObject> noteObjects;
+	private Iterator<NoteObject> noteIterator1, noteIterator2;
+	int curXpos = 150, xDist = 150, hold = 0;
 	
 	//set up the detector thread and capture thread and other related variable
 	private DetectThread dt;
@@ -62,6 +66,8 @@ public class Screen_4 extends Activity implements Runnable
 	int curr;
 	
 	private ToggleButton b;
+	private ImageView led;
+	private AnimationDrawable frameAnimation;
 	private boolean isPressed = false;
 	
 	@Override
@@ -85,22 +91,24 @@ public class Screen_4 extends Activity implements Runnable
 		SimpleDateFormat sdf = new SimpleDateFormat("dd:MMM:yyyy HH:mm", Locale.ENGLISH);
 		dateTime = sdf.format(c.getTime());
 				
-		b = (ToggleButton)findViewById(R.id.button1);
+		b = (ToggleButton)findViewById(R.id.startButton);
+		b.setOnClickListener(buttonListener);
+		led = (ImageView)findViewById(R.id.ledView);
+
+		setupLED();
+		
 		surface = (SurfaceView) findViewById(R.id.surface);
-		
 		holder = surface.getHolder();
-		//BitmapFactory.decodeResource(getResources(), R.drawable.note);
-		//BitmapFactory.decodeResource(getResources(), R.drawable.rest);
-		
-		
 		n = new NoteObject(this);
-		Log.d("BP", "Here");
-		
-		
+		noteObjects = new ArrayList<NoteObject>();
 		
 		t = new Thread(this);
-		b.setOnClickListener(buttonListener);
-	}
+		
+		//led.setBackgroundResource(R.drawable.animation_led_60);
+		//frameAnimation = (AnimationDrawable)led.getBackground();
+		
+	}//End of onCreate
+
 
 	final OnClickListener buttonListener = new OnClickListener() 
 	{
@@ -115,17 +123,26 @@ public class Screen_4 extends Activity implements Runnable
 				if(isPressed)
 				{
 					Log.d("Button", "Pressed");
-					b.setBackgroundResource(R.drawable.record);			
+					b.setBackgroundResource(R.drawable.record);
+					led.post(new Runnable() 
+					{
+						@Override
+						public void run() 
+						{frameAnimation.start();}
+					});
+					
+							
 					ct = new CaptureThread();
 					ct.start();
 					dt = new DetectThread(ct);
 					dt.start();
+					locker = true;
 					t.start();
-					
 				}
 				else
 				{
 					b.setBackgroundResource(R.drawable.stop);
+					frameAnimation.stop();
 					locker = false;
 					t = null;
 					if(ct != null)
@@ -138,18 +155,19 @@ public class Screen_4 extends Activity implements Runnable
 						dt.stopDetect();
 						dt = null;
 					}
-						promptDialog();		
+					promptDialog("Recording finished", "Would you like to save this?");		
 				}
 			}
 		}
-	};
+	};//End of OnClickListener 
 	
 
-	private void promptDialog()
+	private void promptDialog(String title, String message)
 	{
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Recording stopped");
-		alert.setMessage("Would you like to save this?");
+		alert.setCancelable(false);
+		alert.setTitle(title);
+		alert.setMessage(message);
 		
 		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() 
 		{
@@ -164,8 +182,10 @@ public class Screen_4 extends Activity implements Runnable
 				else
 					Toast.makeText(Screen_4.this, "Error..Data not saved", Toast.LENGTH_LONG).show();
 				
-				Intent intent = new Intent(Screen_4.this, Screen_1.class);
+				Intent intent = new Intent(Screen_4.this, Screen_2.class);
+				intent.putExtra("compo_details", extras);
 				startActivity(intent);
+				finish();
 			}
 		}); 
 		
@@ -175,22 +195,35 @@ public class Screen_4 extends Activity implements Runnable
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				//Go back to screen 3 with extras.
+				Intent intent = new Intent(getBaseContext(), Screen_0.class);
+				startActivity(intent);
+				finish();
 			}
 		});
+		
 		alert.show();
-	}
+	}//End of promptDialog()
 	
 	private boolean saveToDB(String songTitle, String dateTime, String bps, String timeSig, String dirPath)
 	{
 		dbmgr.open();
-		if(dbmgr.insert(songTitle, dateTime, bps, timeSig, dirPath) > 0)
+		long id = dbmgr.insert(songTitle, dateTime, bps, timeSig, dirPath);
+		if(id > 0)
 		{
-			dbmgr.close();
-			return true;
+			Cursor c = dbmgr.getRow(id);
+			extras = new String[c.getColumnCount()];
+			if(c != null)
+			{
+				for (int i = 0; i < c.getColumnCount(); i++)
+					extras[i] = c.getString(i);
+				
+				dbmgr.close();
+				return true;
+			}
 		}
+		dbmgr.close();
 		return false;
-	}
+	}//end of saveToDB()
 	
 	
 	private boolean saveDataToFile()
@@ -212,7 +245,7 @@ public class Screen_4 extends Activity implements Runnable
 			}
 		}
 		return false;
-	}
+	}//End of saveDataToFile
 	
 	//Running Thread
 	@Override
@@ -224,14 +257,13 @@ public class Screen_4 extends Activity implements Runnable
 		canvasHeight = dimension.height();
 		canvasWidth = dimension.width();
 		Bitmap background = drawStaff();
-		//scaledNoteBitmap = Bitmap.createScaledBitmap(noteBitmap, canvasWidth/15, canvasHeight/9, true);
-		//scaledRestBitmap = Bitmap.createScaledBitmap(restBitmap, canvasWidth/15, (canvasHeight/9)/2, true);
-		
+
 		n.setCanvasSize(canvasWidth, canvasHeight);
 		n.init();
 		
 		while(locker)
 		{
+			Log.d("canvas animation", "here");
 			if(!holder.getSurface().isValid())
 				continue;
 
@@ -241,7 +273,7 @@ public class Screen_4 extends Activity implements Runnable
 			draw(canvas);
 			holder.unlockCanvasAndPost(canvas);
 		}
-	}
+	}//End of Run()
 	
 	
 	public void update()
@@ -269,7 +301,7 @@ public class Screen_4 extends Activity implements Runnable
 		}
 		//When in rest - code goes inside else clause
 		hold = dt.getCurrentNote();
-	}
+	}//End of update()
 	
 	public void draw(Canvas c)
 	{
@@ -280,8 +312,7 @@ public class Screen_4 extends Activity implements Runnable
 			NoteObject curNO = noteIterator2.next();
 			curNO.draw(c);
 		}	
-		
-	}
+	}//End of draw();
 	
 	
 	//Method to draw white background with lines
@@ -295,6 +326,7 @@ public class Screen_4 extends Activity implements Runnable
 		
 		Paint paint1 = new Paint();
 		paint1.setColor(Color.rgb(196, 195, 170));
+		paint1.setTextSize(canvasHeight/12);
 		
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(canvasHeight*0.008f);
@@ -328,6 +360,54 @@ public class Screen_4 extends Activity implements Runnable
 	}
 	
 	
+	@Override
+	protected void onRestart() 
+	{
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(getBaseContext(), Screen_3.class);
+		startActivity(intent);
+		finish();
+		super.onRestart();
+	}
+
+	/*
+	@Override
+	protected void onResume() 
+	{
+		// TODO Auto-generated method stub
+		super.onResume();
+		Intent intent = new Intent(getBaseContext(), Screen_0.class);
+		startActivity(intent);
+		finish();
+	}
+	*/
+	@Override
+	protected void onPause() 
+	{
+		// TODO Auto-generated method stub
+		super.onPause();
+		if(frameAnimation.isRunning())
+			frameAnimation.stop();
+		
+		if(locker)
+			locker = false;
+		if(t != null)
+			t = null;
+		
+		if(ct != null)
+		{
+			ct.stopRecord();
+			ct = null;
+		}
+		if(dt != null)
+		{
+			dt.stopDetect();
+			dt = null;
+			Toast.makeText(this, "Interrupted. No data saved", Toast.LENGTH_LONG).show();
+		}
+		
+		//finish();
+	}
 	
 	@Override
 	public void onDestroy()
@@ -344,6 +424,7 @@ public class Screen_4 extends Activity implements Runnable
 		}
 		super.onDestroy();
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -353,5 +434,79 @@ public class Screen_4 extends Activity implements Runnable
 	}
 	
 	
+	
+	private void setupLED() 
+	{
+		// TODO Auto-generated method stub
+		switch(bps)
+		{
+			case 60:
+				led.setBackgroundResource(R.drawable.animation_led_60);
+				break;
+			case 80:
+				led.setBackgroundResource(R.drawable.animation_led_80);
+				break;
+			case 120:
+				led.setBackgroundResource(R.drawable.animation_led_80);
+				break;	
+		}
+		
+		Log.d("BPS", String.valueOf(bps));
+		
+		frameAnimation = (AnimationDrawable)led.getBackground();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+		{
+			b.setBackgroundResource(R.drawable.stop);
+			if(frameAnimation.isRunning())
+				frameAnimation.stop();
+			
+			if(locker)
+			{
+				promptDialog("Recording interrupted", "Save recording?");	
+				locker = false;
+			}
+				
+			t = null;
+			if(ct != null)
+			{
+				ct.stopRecord();
+				ct = null;
+			}
+			if(dt != null)
+			{
+				dt.stopDetect();
+				dt = null;
+			}
+			
+		}
+		
+		if (keyCode == KeyEvent.KEYCODE_HOME && event.getRepeatCount() == 0)
+		{
+			if(frameAnimation.isRunning())
+				frameAnimation.stop();
+			if(locker)
+				locker = false;
+			if(t != null)
+				t = null;
+			if(ct != null)
+			{
+				ct.stopRecord();
+				ct = null;
+			}
+			if(dt != null)
+			{
+				dt.stopDetect();
+				dt = null;
+			}
+			Toast.makeText(this, "Interrupted. No data saved", Toast.LENGTH_LONG).show();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 
 }

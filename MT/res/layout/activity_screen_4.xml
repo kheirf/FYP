@@ -17,14 +17,13 @@
         android:background="@drawable/aluminum" >
 
         <ImageView
-            android:id="@+id/led_view"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:contentDescription="@string/desc"
-            android:src="@drawable/ledoff"
+            android:id="@+id/ledView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:padding="2dp"
+            android:contentDescription="@string/desc"
             android:layout_alignParentRight="true"
-             />
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
     
@@ -47,27 +46,20 @@
         android:layout_height="0dp"
         android:layout_weight="1.3"
         android:orientation="horizontal"
-        android:background="@drawable/aluminum">
-
-        <LinearLayout 
-            android:id="@+id/S4L3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dp">
+        android:background="@drawable/aluminum" >
             
             <ToggleButton
-            		android:id="@+id/button1"
+            		android:id="@+id/startButton"
             		android:textOn=""
             		android:textOff=""
             		android:layout_width="55dp"
             		android:layout_height="55dp"
             		android:background="@drawable/stop"
+            		android:layout_centerVertical="true"
+            		android:layout_alignParentLeft="true"
+            		android:layout_marginLeft="10dp"
             		 />
-        </LinearLayout>
-            
-       	 
-       	 	
+	
     </RelativeLayout>
 
 </LinearLayout>

@@ -3,10 +3,10 @@
     <item android:drawable="@drawable/s1" android:duration="2000" />
     <item android:drawable="@drawable/s2" android:duration="700" />
     <item android:drawable="@drawable/s3" android:duration="400" />
-    <item android:drawable="@drawable/s4" android:duration="300" />
-    <item android:drawable="@drawable/s5" android:duration="1000" />
-    <item android:drawable="@drawable/s6" android:duration="500" />
-    <item android:drawable="@drawable/s7" android:duration="500" />
-    <item android:drawable="@drawable/s8" android:duration="500" />
+    <item android:drawable="@drawable/s4" android:duration="400" />
+    <item android:drawable="@drawable/s5" android:duration="400" />
+    <item android:drawable="@drawable/s6" android:duration="400" />
+    <item android:drawable="@drawable/s7" android:duration="400" />
+    <item android:drawable="@drawable/s8" android:duration="400" />
    
 </animation-list>

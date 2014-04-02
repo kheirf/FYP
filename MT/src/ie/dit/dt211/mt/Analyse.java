@@ -1,7 +1,5 @@
 package ie.dit.dt211.mt;
 
-import android.util.Log;
-
 import com.musicg.math.rank.ArrayRankDouble;
 import com.musicg.wave.Wave;
 import com.musicg.wave.WaveHeader;
@@ -38,7 +36,7 @@ public class Analyse
 		 * */
 		if (audioBytes == null)
 		{
-			//return 0;
+			return 0;
 		}
 		
 		int bps = waveH.getBitsPerSample() / 8; //bits per sample = 16 divided by 8 = 2 bytes per sample
@@ -54,8 +52,7 @@ public class Analyse
 		unitFreq = (double) waveH.getSampleRate() / 2 / numFreqUnit; //try 512 or 1024
 		ArrayRankDouble ard = new ArrayRankDouble();
 		double robustFreq = ard.getMaxValueIndex(spectrum) * unitFreq;
-		
-		Log.d("robustFreq", String.valueOf(robustFreq));
+
 		
 		return robustFreq;
 		

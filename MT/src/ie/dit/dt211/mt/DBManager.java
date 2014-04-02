@@ -94,7 +94,7 @@ public class DBManager
 	{
 		Cursor theCursor = db.query(true, DATABASE_TABLE, new String[]{
 				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
-							KEY_ID + "=" + ID, 
+							KEY_ID + " = " + ID, 
 							null, null, null, null, null);
 		if (theCursor != null)
 			theCursor.moveToFirst();

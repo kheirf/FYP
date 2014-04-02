@@ -20,11 +20,15 @@ public class Screen_3 extends Activity
 	Spinner meter;
 	NumberPicker np;
 	
+	Intent inte;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_3);
+		
+		inte = getIntent();
 		
 		next = (Button)findViewById(R.id.s2Next);
 		cancel = (Button)findViewById(R.id.cancel1);
@@ -84,8 +88,11 @@ public class Screen_3 extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(getBaseContext(), Screen_1.class);
-				startActivity(intent);
+				//Intent inte = getIntent();
+				//Intent intent = new Intent(getBaseContext(), Screen_1.class);
+				//startActivity(inte);
+				onBackPressed();
+				finish();
 			}
 		});
 		

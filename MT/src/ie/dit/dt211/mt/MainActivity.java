@@ -32,9 +32,10 @@ public class MainActivity extends Activity
 			@Override
 			public void run() 
 			{
-				finish();
+				frameAnimation.stop();
 				Intent intent = new Intent(MainActivity.this, Screen_0.class);
 				startActivity(intent);
+				finish();
 			}}, duration + 1000);
 			
 	}

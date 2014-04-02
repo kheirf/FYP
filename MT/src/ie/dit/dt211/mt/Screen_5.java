@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +75,7 @@ public class Screen_5 extends Activity
 				Intent intent = new Intent(getBaseContext(), Screen_2.class);
 				intent.putExtra("compo_details", extras);
 				startActivity(intent);
+				finish();
 			}
 		});
 	}
@@ -127,6 +129,22 @@ public class Screen_5 extends Activity
 	{
 		super.onPause();
 		msv.onPause();
+	}
+
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+		{
+			msv.onDestroy();
+			Intent intent = new Intent(getBaseContext(), Screen_2.class);
+			intent.putExtra("compo_details", extras);
+			startActivity(intent);
+			finish();
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 

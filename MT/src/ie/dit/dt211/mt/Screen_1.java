@@ -1,10 +1,13 @@
 package ie.dit.dt211.mt;
 
+import java.io.IOException;
+
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CursorAdapter;
@@ -44,11 +47,13 @@ public class Screen_1 extends ListActivity
 			@Override
 			public void onClick(View v) 
 			{
-				finish();
-				cursor.close();
+				if(!cursor.isClosed())
+					cursor.close();
+				
 				dbMgr.close();
 				Intent intent = new Intent(Screen_1.this, Screen_3.class);
 				startActivity(intent);
+				//finish();
 			}
 		});
 		
@@ -57,11 +62,13 @@ public class Screen_1 extends ListActivity
 			@Override
 			public void onClick(View v) 
 			{
-				finish();
-				cursor.close();
+				if(!cursor.isClosed())
+					cursor.close();
+				
 				dbMgr.close();
 				Intent intent = new Intent(getBaseContext(), Screen_0.class);
 				startActivity(intent);
+				//finish();
 			}
 		});
 		
@@ -89,20 +96,56 @@ public class Screen_1 extends ListActivity
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.screen_1, menu);
+		menu.add("About");
+		menu.add("Quit");
+		
 		return true;
 	}
 	
-
-	public void onDestroy()
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) 
 	{
-		super.onDestroy();
+		// TODO Auto-generated method stub
+		switch(item.getItemId())
+		{
+		case 0:
+			ShowAbout ab = new ShowAbout();
+			try 
+			{ab.showAbout(this);} 
+			catch (IOException e) 
+			{e.printStackTrace();}
+			break;
+		case 1:
+			
+			break;
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+		return super.onMenuItemSelected(featureId, item);
 	}
 	
-	public void onStop()
+
+	@Override
+	protected void onDestroy()
 	{
+		super.onDestroy();
 		dbMgr.close();
-		cursor.close();
+		if(!cursor.isClosed())
+			cursor.close();
 		super.onStop();
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		dbMgr.open();
+		cursor = dbMgr.getAllRowsDesc();
+		cursor.moveToFirst();
+		adapter = new CustomAdapter(this, cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		listV.setAdapter((ListAdapter) adapter);
+		super.onResume();
+	}
+	
+	//onrest
 
 }

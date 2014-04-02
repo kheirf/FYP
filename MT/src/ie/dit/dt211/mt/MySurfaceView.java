@@ -243,6 +243,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	
 	
 	
+	
+	
 	/****************************************************************************************************
 	 * 
 	 * @author Kheir

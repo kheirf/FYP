@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,20 @@ import android.widget.TextView;
 
 public class Screen_0 extends Activity implements OnClickListener
 {
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+		if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+		{
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
+		// TODO Auto-generated method stub
+		return super.onKeyDown(keyCode, event);
+	}
+
 	private Button create, list, quit, about, ok;
 	private Dialog dialog;
 	@Override
@@ -45,16 +60,16 @@ public class Screen_0 extends Activity implements OnClickListener
 	{
 		if(v.getId() == create.getId())
 		{
-			Intent intent = new Intent(getBaseContext(), Screen_3.class);
+			Intent intent = new Intent(this, Screen_3.class);
 			startActivity(intent);
-			finish();
+			//finish();
 		}
 		
 		if(v.getId() == list.getId())
 		{
 			Intent intent = new Intent(getBaseContext(), Screen_1.class);
 			startActivity(intent);
-			finish();
+			//finish();
 		}
 		
 		if(v.getId() == quit.getId())
@@ -64,13 +79,15 @@ public class Screen_0 extends Activity implements OnClickListener
 		
 		if(v.getId() == about.getId())
 		{
+			ShowAbout ab = new ShowAbout();
 			try 
-			{showAbout();} 
+			{ab.showAbout(this);} 
 			catch (IOException e) 
 			{e.printStackTrace();}
 		}
-		
 	}
+	
+	
 	
 	private void promptClose() 
 	{
@@ -90,7 +107,6 @@ public class Screen_0 extends Activity implements OnClickListener
 		
 		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() 
 		{
-			
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
 			{}
@@ -102,8 +118,12 @@ public class Screen_0 extends Activity implements OnClickListener
 	
 	public void closeApplication()
 	{
-		finish();
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 		android.os.Process.killProcess(android.os.Process.myPid());
+		finish();
 	}
 	
 	public void showAbout() throws IOException
@@ -142,6 +162,7 @@ public class Screen_0 extends Activity implements OnClickListener
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.setTitle("About");
 		dialog.show();
+		bit.close();
 	}
 
 	@Override

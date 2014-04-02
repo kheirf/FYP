@@ -104,6 +104,9 @@ public class CustomAdapter extends CursorAdapter // implements OnItemClickListen
 		Cursor cursor = dbmgr.getAllRowsDesc();
 		changeCursor(cursor);
 		dbmgr.close();
+		
+		if(!cursor.isClosed())
+			cursor.close();
 	}
 	
 	@Override

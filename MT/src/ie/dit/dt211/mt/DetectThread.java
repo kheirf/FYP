@@ -24,8 +24,8 @@ public class DetectThread extends Thread
 	protected Wave wave;
 	protected AudioTimestamp audioTime;
 	
-	private CaptureThread ct;
-	private Analyse analyzer;
+	CaptureThread ct;
+	Analyse analyzer;
 	private WaveHeader wh;
 	private volatile Thread _thread;
 	protected int note = 0;
@@ -49,10 +49,9 @@ public class DetectThread extends Thread
 				bps = 8;
 		
 		int channel = 0;
+		
 		if (ar.getChannelConfiguration() == AudioFormat.CHANNEL_IN_MONO)
-		{
 			channel = 1;
-		}
 		
 		wh = new WaveHeader();
 		wh.setChannels(channel);
@@ -74,7 +73,7 @@ public class DetectThread extends Thread
 		_thread = null;
 	}
 	
-	protected double getAverageLoudness(byte [] data)
+	protected double getAverageLoudness(byte[] data)
 	{
 		int frameSize = ct.getFrameSize();
 		int z = 0;
@@ -106,23 +105,19 @@ public class DetectThread extends Thread
 		try
 		{
 			double frequency = 0.0;
-			byte [] buffer = new byte[4096];
+			byte [] buffer;
 			Thread t = Thread.currentThread();
 			while(_thread == t)
 			{
-				
 				buffer = ct.getFrameByte();
-				if(getAverageLoudness(buffer) > 50) //original 30
+				if(buffer != null) //original 30
 				{
-					
 					frequency = analyzer.robustFrequency(buffer);
-					
-					Log.d("loudness", String.valueOf(getAverageLoudness(buffer)) );
 					
 					if((frequency > 257) && (frequency < 783.9))
 					{
 						note = closestNote(frequency);
-						onDetected();
+						//onDetected();
 					}
 				}
 				else

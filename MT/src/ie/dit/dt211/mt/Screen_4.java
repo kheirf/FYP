@@ -1,6 +1,12 @@
 package ie.dit.dt211.mt;
 
 
+import ie.dit.dt211.mt.model.CaptureThread;
+import ie.dit.dt211.mt.model.DBManager;
+import ie.dit.dt211.mt.model.DetectThread;
+import ie.dit.dt211.mt.model.FileHandler;
+import ie.dit.dt211.mt.model.NoteObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +16,7 @@ import java.util.Locale;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +34,7 @@ import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -38,6 +46,7 @@ public class Screen_4 extends Activity implements Runnable
 	//Database manager
 	private DBManager dbmgr;
 	String [] extras;
+	String nextAutoIncrement;
 	
 	//Data from previous intent
 	private String songTitle, timeSig, dateTime, dirPath;
@@ -70,21 +79,33 @@ public class Screen_4 extends Activity implements Runnable
 	private AnimationDrawable frameAnimation;
 	private boolean isPressed = false;
 	
+	Context ctx;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_screen_4);
 		
+		ctx = this;
+		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
 		dbmgr = new DBManager(this);
+		dbmgr.open();
+		nextAutoIncrement = String.valueOf(dbmgr.nextAutoincrement() + 1);
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null)
 		{
-			songTitle = extras.getString("songTitle");
+			if(!extras.getString("songTitle").equals(""))
+				songTitle = extras.getString("songTitle");
+			else
+				songTitle = "Untitled " + nextAutoIncrement;
 			timeSig = extras.getString("timeSig");
 			bps = extras.getInt("bps");
 		}
+		
 		
 		
 		Calendar c = Calendar.getInstance();
@@ -99,14 +120,12 @@ public class Screen_4 extends Activity implements Runnable
 		
 		surface = (SurfaceView) findViewById(R.id.surface);
 		holder = surface.getHolder();
+		
 		n = new NoteObject(this);
 		noteObjects = new ArrayList<NoteObject>();
-		
+		dbmgr.close();
 		t = new Thread(this);
-		
-		//led.setBackgroundResource(R.drawable.animation_led_60);
-		//frameAnimation = (AnimationDrawable)led.getBackground();
-		
+		Toast.makeText(this, "Press button on left to start!", Toast.LENGTH_LONG).show();
 	}//End of onCreate
 
 
@@ -122,7 +141,6 @@ public class Screen_4 extends Activity implements Runnable
 
 				if(isPressed)
 				{
-					Log.d("Button", "Pressed");
 					b.setBackgroundResource(R.drawable.record);
 					led.post(new Runnable() 
 					{
@@ -144,7 +162,11 @@ public class Screen_4 extends Activity implements Runnable
 					b.setBackgroundResource(R.drawable.stop);
 					frameAnimation.stop();
 					locker = false;
+					
+					promptDialog("Recording finished", "Would you like to save this?");	
+					
 					t = null;
+					
 					if(ct != null)
 					{
 						ct.stopRecord();
@@ -153,9 +175,10 @@ public class Screen_4 extends Activity implements Runnable
 					if(dt != null)
 					{
 						dt.stopDetect();
-						dt = null;
+						//dt = null;
 					}
-					promptDialog("Recording finished", "Would you like to save this?");		
+					
+						
 				}
 			}
 		}
@@ -176,14 +199,21 @@ public class Screen_4 extends Activity implements Runnable
 			{
 				if(saveDataToFile())
 				{
-					if(saveToDB(songTitle, dateTime, String.valueOf(bps), timeSig, dirPath))
-						Toast.makeText(Screen_4.this, "Saved Successfully..", Toast.LENGTH_SHORT).show();
+					String wavPath = dt.writeToFile(nextAutoIncrement + ".wav", getBaseContext());
+					if(!wavPath.isEmpty())
+					{
+						if(saveToDB(songTitle, dateTime, String.valueOf(bps), timeSig, dirPath, wavPath))
+						{
+							Toast.makeText(Screen_4.this, "Saved Successfully..", Toast.LENGTH_SHORT).show();
+						}
+					}
 				}
 				else
 					Toast.makeText(Screen_4.this, "Error..Data not saved", Toast.LENGTH_LONG).show();
 				
-				Intent intent = new Intent(Screen_4.this, Screen_2.class);
+				Intent intent = new Intent(getBaseContext(), Screen_2.class);
 				intent.putExtra("compo_details", extras);
+				intent.putExtra("activity_caller", "s4");
 				startActivity(intent);
 				finish();
 			}
@@ -204,10 +234,10 @@ public class Screen_4 extends Activity implements Runnable
 		alert.show();
 	}//End of promptDialog()
 	
-	private boolean saveToDB(String songTitle, String dateTime, String bps, String timeSig, String dirPath)
+	private boolean saveToDB(String songTitle, String dateTime, String bps, String timeSig, String dirPath, String wav)
 	{
 		dbmgr.open();
-		long id = dbmgr.insert(songTitle, dateTime, bps, timeSig, dirPath);
+		long id = dbmgr.insert(songTitle, dateTime, bps, timeSig, dirPath, wav);
 		if(id > 0)
 		{
 			Cursor c = dbmgr.getRow(id);
@@ -234,8 +264,8 @@ public class Screen_4 extends Activity implements Runnable
 		{
 			dbmgr = new DBManager(this);
 			dbmgr.open();
-			String highestID = String.valueOf(dbmgr.nextAutoincrement() + 1);
-			String dirHolder = FileHandler.write(this, ser, highestID+".dat");// + "/" + highestID + ".dat";
+			//next = String.valueOf(dbmgr.nextAutoincrement() + 1);
+			String dirHolder = FileHandler.write(this, ser, nextAutoIncrement+".dat");// + "/" + highestID + ".dat";
 			Log.d("dirHolder", dirHolder);
 			dbmgr.close();
 			if(!dirHolder.equals(""))
@@ -260,57 +290,86 @@ public class Screen_4 extends Activity implements Runnable
 
 		n.setCanvasSize(canvasWidth, canvasHeight);
 		n.init();
+		Thread th = Thread.currentThread();
 		
-		while(locker)
+		while(locker && t == th)
 		{
-			Log.d("canvas animation", "here");
 			if(!holder.getSurface().isValid())
 				continue;
 
 			canvas = holder.lockCanvas();
 			canvas.drawBitmap(background, 0, 0, null);
-			update();
-			draw(canvas);
+			
+			try 
+			{
+				synchronized (holder) 
+				{
+					// Update the list before drawing
+					update();
+					// Do some drawing onto the canvas
+					draw(canvas);
+				}
+				Thread.sleep(1);
+			} catch (InterruptedException e) 
+			{e.printStackTrace();}
+			
+			
+			
 			holder.unlockCanvasAndPost(canvas);
 		}
 	}//End of Run()
 	
 	
-	public void update()
+	private void update()
 	{
-		//long wait = System.currentTimeMillis() + 500;
 		if(dt.getCurrentNote() > 0)
 		{
-			if(dt.getCurrentNote() != hold)
+			// Check if the note is the same as the current note is the same
+			// as the previous note.
+			if(dt.getCurrentNote() != hold) 
 			{
-				if((curXpos + xDist) < canvasWidth)
+				// Checks if the position of notes have reached the edge of the screen
+				if((curXpos + xDist) < canvasWidth - 100)
 				{
 					curXpos += xDist;
 				}
+				// if it reached, then move the position of previous notes to the left.
 				else
 				{
 					noteIterator1 = noteObjects.iterator();
+					//Iterate through the list and subtracting the x-axis position of notes.
 					while(noteIterator1.hasNext())
 					{
 						NoteObject cur = noteIterator1.next();
 						cur.setXpos((int)cur.getXpos() - xDist);
 					}
 				}
+				// leaving the new notes drawn into the edge of the screen.
 				noteObjects.add(new NoteObject(dt.getCurrentNote(), curXpos));
+				
+				// let this thread sleep for about 0.1 second.
+				try 
+				{Thread.sleep(100);} 
+				catch (InterruptedException e) 
+				{e.printStackTrace();}
 			}
 		}
 		//When in rest - code goes inside else clause
 		hold = dt.getCurrentNote();
 	}//End of update()
 	
-	public void draw(Canvas c)
+	private void draw(Canvas c)
 	{
 		
 		noteIterator2 = noteObjects.iterator();
+		//Iterates through the list
 		while(noteIterator2.hasNext())
 		{
 			NoteObject curNO = noteIterator2.next();
-			curNO.draw(c);
+			//checks if the notes are displayable
+			//i.e. their x-position is within the surfaceview's dimension
+			if(curNO.displayable())
+				curNO.draw(c);
 		}	
 	}//End of draw();
 	
@@ -386,6 +445,8 @@ public class Screen_4 extends Activity implements Runnable
 	{
 		// TODO Auto-generated method stub
 		super.onPause();
+		//Toast.makeText(this, "Interrupted. No data saved", Toast.LENGTH_LONG).show();
+		
 		if(frameAnimation.isRunning())
 			frameAnimation.stop();
 		
@@ -403,7 +464,6 @@ public class Screen_4 extends Activity implements Runnable
 		{
 			dt.stopDetect();
 			dt = null;
-			Toast.makeText(this, "Interrupted. No data saved", Toast.LENGTH_LONG).show();
 		}
 		
 		//finish();

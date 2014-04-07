@@ -1,4 +1,4 @@
-package ie.dit.dt211.mt;
+package ie.dit.dt211.mt.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,14 +18,15 @@ public class DBManager
 	public static final String KEY_TEMPO = "tempo";
 	public static final String KEY_TIME_SIGNATURE = "time";
 	public static final String KEY_FILE_PATH = "path";
+	public static final String KEY_WAV_PATH = "wav";
 	private static final String DATABASE_NAME = "MT";
 	private static final String DATABASE_TABLE = "Composition";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	public static final String DATABASE_CREATE = "create table " + DATABASE_TABLE + "(" +
 			KEY_ID + " integer primary key autoincrement, " + KEY_TITLE + " text not null, " +
 			KEY_DATE_CREATED + " text not null, " + KEY_TEMPO + " text null, " + 
-			KEY_TIME_SIGNATURE + " text null, " + KEY_FILE_PATH + " text not null );";
+			KEY_TIME_SIGNATURE + " text null, " + KEY_FILE_PATH + " text not null, " + KEY_WAV_PATH + " text not null );";
 	
 	private final Context context;
 	private DatabaseHelper dbHelper;
@@ -50,6 +51,7 @@ public class DBManager
 		public DatabaseHelper(Context context) 
 		{
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			
 		}
 
 		@Override
@@ -75,6 +77,8 @@ public class DBManager
 	public DBManager open()
 	{
 		db = dbHelper.getWritableDatabase();
+		//db.execSQL("D")
+		//db.delete(DATABASE_TABLE, null, null);
 		return this;
 	}
 	
@@ -86,22 +90,25 @@ public class DBManager
 	public Cursor getAllRowsDesc()
 	{
 		return db.query(DATABASE_TABLE, new String[]{
-				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH, KEY_WAV_PATH}, 
 				null, null, null, null, KEY_ID + " DESC", null);
 	}
 	
 	public Cursor getRow(long ID) throws SQLException
 	{
 		Cursor theCursor = db.query(true, DATABASE_TABLE, new String[]{
-				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH, KEY_WAV_PATH}, 
 							KEY_ID + " = " + ID, 
 							null, null, null, null, null);
 		if (theCursor != null)
+		{
 			theCursor.moveToFirst();
-		return theCursor;
+			return theCursor;
+		}
+		return null;
 	}
 	
-	public long insert(String title, String timestamp, String tempo, String timeSignature, String path)
+	public long insert(String title, String timestamp, String tempo, String timeSignature, String path, String wav)
 	{
 		ContentValues initVal = new ContentValues();
 		initVal.put(KEY_TITLE, title);
@@ -109,6 +116,7 @@ public class DBManager
 		initVal.put(KEY_TEMPO, tempo);
 		initVal.put(KEY_TIME_SIGNATURE, timeSignature);
 		initVal.put(KEY_FILE_PATH, path);
+		initVal.put(KEY_WAV_PATH, wav);
 
 		return db.insert(DATABASE_TABLE, null, initVal);
 	}
@@ -130,7 +138,7 @@ public class DBManager
 	public int countRows()
 	{
 		Cursor cursor = db.query(DATABASE_TABLE, new String[]{
-				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH, KEY_WAV_PATH}, 
 				null, null, null, null, KEY_ID + " DESC", null);
 		if(cursor.getCount() > 0)
 			return cursor.getCount();
@@ -141,7 +149,7 @@ public class DBManager
 	public int getHighID()
 	{
 		Cursor cursor = db.query(DATABASE_TABLE, new String[]{
-				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH}, 
+				KEY_ID, KEY_TITLE, KEY_DATE_CREATED, KEY_TEMPO, KEY_TIME_SIGNATURE, KEY_FILE_PATH, KEY_WAV_PATH}, 
 				null, null, null, null, KEY_ID + " DESC", null);
 		if(cursor.getCount() > 0)
 		{

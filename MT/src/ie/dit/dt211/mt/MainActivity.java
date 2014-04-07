@@ -36,7 +36,7 @@ public class MainActivity extends Activity
 				Intent intent = new Intent(MainActivity.this, Screen_0.class);
 				startActivity(intent);
 				finish();
-			}}, duration + 1000);
+			}}, duration + 500);
 			
 	}
 

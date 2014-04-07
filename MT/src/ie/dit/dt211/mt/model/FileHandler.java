@@ -1,4 +1,4 @@
-package ie.dit.dt211.mt;
+package ie.dit.dt211.mt.model;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -78,6 +78,7 @@ public class FileHandler
 	            fos.write(data); 
 	            fos.flush();
 	            ret = filename;//String.valueOf(ctx.getFilesDir());
+	            Log.d("File Path", filename);
 	        } 
 	        catch (Exception e) 
 	        { e.printStackTrace();} 

@@ -1,4 +1,4 @@
-package ie.dit.dt211.mt;
+package ie.dit.dt211.mt.model;
 
 import com.musicg.math.rank.ArrayRankDouble;
 import com.musicg.wave.Wave;
@@ -8,7 +8,7 @@ import com.musicg.wave.extension.Spectrogram;
 
 public class Analyse 
 {
-	protected WaveHeader waveH;
+	protected WaveHeader wh;
 	protected int fftSampleSize;
 	protected int numFreqUnit;
 	protected double unitFreq;
@@ -17,7 +17,7 @@ public class Analyse
 	public Analyse(WaveHeader wh)
 	{
 		if (wh.getChannels() == 1)
-			this.waveH = wh;
+			this.wh = wh;
 		
 		
 	}
@@ -39,17 +39,17 @@ public class Analyse
 			return 0;
 		}
 		
-		int bps = waveH.getBitsPerSample() / 8; //bits per sample = 16 divided by 8 = 2 bytes per sample
-		int samples = audioBytes.length / bps; //samples = 4086 / 2 = 2048 samples
+		int bps = wh.getBitsPerSample() / 8; //bits per sample = 16 divided by 8 = 2 bytes per sample
+		int samples = audioBytes.length / bps; //samples = 4096 / 2 = 2048 samples
 		fftSampleSize = samples; //fft = 2048
 		numFreqUnit = fftSampleSize / 2; //frequency unit = 1024
-		Wave wav = new Wave(waveH, audioBytes);
-		Spectrogram spectrogram = wav.getSpectrogram(fftSampleSize, 0); //Try changing the fftsample size to 1024 or 2048 (java error)
-		double [][] data = spectrogram.getAbsoluteSpectrogramData();
-		double [][] normalized = normalizeSpectrogram(data);
-		double [] spectrum = normalized[0];
+		Wave wav = new Wave(wh, audioBytes);
+		Spectrogram spectrogram = wav.getSpectrogram(fftSampleSize, 0); //fftSampleSize = 2048, no overlapping
+		double [][] data = spectrogram.getAbsoluteSpectrogramData(); //get data from spectrogram
+		double [][] normalized = normalizeSpectrogram(data); //normalize data from spectrogram
+		double [] spectrum = normalized[0]; //the robust frequencies is along this position of the array
 		
-		unitFreq = (double) waveH.getSampleRate() / 2 / numFreqUnit; //try 512 or 1024
+		unitFreq = (double) wh.getSampleRate() / 2 / numFreqUnit;
 		ArrayRankDouble ard = new ArrayRankDouble();
 		double robustFreq = ard.getMaxValueIndex(spectrum) * unitFreq;
 

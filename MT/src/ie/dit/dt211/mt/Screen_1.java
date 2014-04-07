@@ -1,5 +1,7 @@
 package ie.dit.dt211.mt;
 
+import ie.dit.dt211.mt.model.DBManager;
+
 import java.io.IOException;
 
 import android.os.Bundle;
@@ -68,11 +70,11 @@ public class Screen_1 extends ListActivity
 				dbMgr.close();
 				Intent intent = new Intent(getBaseContext(), Screen_0.class);
 				startActivity(intent);
-				//finish();
+				finish();
 			}
 		});
 		
-		
+		//cursor.close();
 	}
 	
 	
@@ -88,7 +90,9 @@ public class Screen_1 extends ListActivity
 		}
 		Intent intent = new Intent(getBaseContext(), Screen_2.class);
 		intent.putExtra("compo_details", extra);
+		intent.putExtra("activity_caller", "s1");
 		startActivity(intent);
+		finish();
 	}
 	
 	@Override
@@ -132,8 +136,10 @@ public class Screen_1 extends ListActivity
 		dbMgr.close();
 		if(!cursor.isClosed())
 			cursor.close();
+		finish();
 		super.onStop();
 	}
+	
 	
 	@Override
 	protected void onResume() {
@@ -143,6 +149,8 @@ public class Screen_1 extends ListActivity
 		cursor.moveToFirst();
 		adapter = new CustomAdapter(this, cursor, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		listV.setAdapter((ListAdapter) adapter);
+		dbMgr.close();
+		//cursor.close();
 		super.onResume();
 	}
 	

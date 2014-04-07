@@ -1,4 +1,4 @@
-package ie.dit.dt211.mt;
+package ie.dit.dt211.mt.model;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,20 +19,22 @@ public class NoteObject implements Serializable
 	 */
 	private static final long serialVersionUID = -3504520557931067017L;
 	
-	int type;
-	static int canvasHeight, canvasWidth;
-	static Bitmap noteBitmap, scaledNoteBitmap, sharpBitmap, scaledSharpBitmap;
-	static Context ctx;
-	float distance = 0.150f, x, y;
-	static final Hashtable<Integer, Float> multiplier = new Hashtable<Integer, Float>();
+	private int type;
+	private static int canvasHeight, canvasWidth;
+	private static Bitmap noteBitmap, scaledNoteBitmap, sharpBitmap, scaledSharpBitmap;
+	private static Context ctx;
+	private float distance = 0.150f, x, y;
+	private static final Hashtable<Integer, Float> multiplier = new Hashtable<Integer, Float>();
 	
-	public NoteObject(Context ctx)
+	
+	// Default Constructor;
+	public NoteObject(Context ctx) 
 	{
 		NoteObject.ctx = ctx;
-		//init();
 	}
 	
-	public NoteObject(int type, int x)
+	// Creating new NoteObject. The default constructor must be initiated first
+	public NoteObject(int type, int x) 
 	{
 		this(ctx);
 		this.x = x;
@@ -40,6 +42,7 @@ public class NoteObject implements Serializable
 		this.y = calcPos(type);
 	}
 	
+	// Checks if the position of the note is within the dimension of the screen
 	public boolean displayable()
 	{
 		if(x < -50 || x > canvasWidth + 50)
@@ -48,10 +51,10 @@ public class NoteObject implements Serializable
 		return true;
 	}
 	
+	//Initialize some variables for calculating the position
 	public void init()
 	{
 		initializeBitmap();
-		
 		multiplier.put(1, 6.0f);
 		multiplier.put(2, 6.0f);
 		multiplier.put(3, 5.5f);

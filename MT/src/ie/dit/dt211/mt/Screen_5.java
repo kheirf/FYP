@@ -2,6 +2,8 @@ package ie.dit.dt211.mt;
 
 
 import ie.dit.dt211.mt.MySurfaceView.MyThread;
+import ie.dit.dt211.mt.model.FileHandler;
+import ie.dit.dt211.mt.model.NoteObject;
 
 import java.util.ArrayList;
 import android.app.Activity;
@@ -74,6 +76,7 @@ public class Screen_5 extends Activity
 				msv.onDestroy();
 				Intent intent = new Intent(getBaseContext(), Screen_2.class);
 				intent.putExtra("compo_details", extras);
+				intent.putExtra("activity_caller", "s5");
 				startActivity(intent);
 				finish();
 			}

@@ -6,25 +6,21 @@
  *  				Wong's implementation of WhistleAPI					*
  ***********************************************************************/
 
-package ie.dit.dt211.mt;
+package ie.dit.dt211.mt.model;
 
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.util.Log;
 
 public class CaptureThread extends Thread
 {
-	
-	
-	protected long startTime;
 	protected int buffSize;
 	private AudioRecord audioRec;
 	private int channelConf = AudioFormat.CHANNEL_IN_MONO; //single channel
 	private int encoding = AudioFormat.ENCODING_PCM_16BIT;
-	private int sampleRate = 44100; //sample rate must be large enough to determine the frequency
-	private int frameSize = 2048; /**original: 4096*/
+	private int sampleRate = 48000; //44100 sample rate must be large enough to determine the frequency
+	private int frameSize = 4096; /**original: 4096*/
 	private boolean flag; //flag to know if recording has stopped or currently running
 	private byte [] buffer;
 	
@@ -33,10 +29,10 @@ public class CaptureThread extends Thread
 	{
 		//record buff size needs to be larger than the size of the frame (frameSize)
 		buffSize = AudioRecord.getMinBufferSize(sampleRate, channelConf, encoding);
-		Log.d("buffSize", String.valueOf(buffSize));
+		
 		audioRec = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConf, encoding, buffSize);
 		buffer = new byte[frameSize];
-		startTime = 0;
+		
 	}
 	
 	public AudioRecord getAudioRecord()
@@ -44,17 +40,12 @@ public class CaptureThread extends Thread
 		return audioRec;
 	}
 	
-	public long getStartTime()
-	{
-		return startTime;
-	}
 	
 	//method to start recording
 	public void startRecord()
 	{
 		try
 		{
-			startTime = System.nanoTime();
 			if(audioRec.getState() == AudioRecord.STATE_INITIALIZED)
 			{
 				audioRec.startRecording();
@@ -105,19 +96,20 @@ public class CaptureThread extends Thread
 	public byte [] getFrameByte()
 	{
 		audioRec.read(buffer, 0, frameSize); //write the recorded audio data to "buffer" array, starting from 0, and with 2042 size
-		int x = 0;
-        short y = 0; 
-        float z = 0.0f;
-        //Short to byte conversion
-        for (int i = 0; i < frameSize; i += 2) {
-            y = (short)((buffer[i]) | buffer[i + 1] << 8);
-            x += Math.abs(y);
-        }
-        z = x / frameSize / 2;
+		//int x = 0;
+       // short y = 0; 
+        //float z = 0.0f;
+        
+        //byte conversion from 16 to 8 bits
+        //for (int i = 0; i < frameSize; i += 2) {
+          //  y = (short)((buffer[i]) | buffer[i + 1] << 8);
+           // x += Math.abs(y);
+        //}
+        //z = x / frameSize / 2;
 
         // no input
-        if (z < 50)
-        	return null;
+        //if (z < 45)
+        	//return null;
         
 		return buffer;
 	}

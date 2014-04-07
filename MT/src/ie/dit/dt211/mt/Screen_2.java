@@ -1,5 +1,6 @@
 package ie.dit.dt211.mt;
 
+import ie.dit.dt211.mt.model.DBManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,10 +14,11 @@ import android.widget.Toast;
 
 public class Screen_2 extends Activity 
 {
-	String filePath, _id, compoTitle;
-	String [] extras;
-	Bundle intentExtras = null;
-	Button review, delete, back;
+	private static String _id, compoTitle;
+	private static String [] extras;
+	private static Bundle intentExtras = null;
+	private static Button review, delete, back;
+	private static Intent prev;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -73,10 +75,9 @@ public class Screen_2 extends Activity
 			else
 				time_sig.setText("N/A");
 			
-			if(!extras[5].isEmpty())
-				filePath = extras[5];
-			else
-				filePath = "N/A";
+			if(!extras[5].isEmpty()) {
+			} else {
+			}
 		}
 		
 	}
@@ -91,8 +92,28 @@ public class Screen_2 extends Activity
 			{
 				//Intent intent = new Intent(getBaseContext(), Screen_1.class);
 				//startActivity(intent);
-				onBackPressed();
-				finish();
+				prev = getIntent();
+				String activity_caller = "";
+				Intent intent = new Intent();
+				
+				if(prev != null)
+					activity_caller = prev.getStringExtra("activity_caller");
+				
+				
+				if(activity_caller.equals("s4"))
+					intent = new Intent(getBaseContext(), Screen_0.class);
+				else
+					if(activity_caller.equals("s1"))
+						intent = new Intent(getBaseContext(), Screen_1.class);
+					else
+						if(activity_caller.equals("s5"))
+							intent = new Intent(getBaseContext(), Screen_1.class);
+				
+							
+						
+					startActivity(intent);
+					finish();
+				
 			}
 			
 			if (v == review)
@@ -156,5 +177,7 @@ public class Screen_2 extends Activity
 		getMenuInflater().inflate(R.menu.screen_2, menu);
 		return true;
 	}
+	
+
 
 }

@@ -2,6 +2,8 @@ package ie.dit.dt211.mt;
 
 
 
+import ie.dit.dt211.mt.model.NoteObject;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -271,27 +273,33 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 	        int action = e.getActionMasked();
 	        int pointerId = e.getPointerId(index);
 
+	        // This code is adapted from the Android's Tutorial on
+	        // velocity tracker API.
 	        switch(action) 
 	        {
-	            case MotionEvent.ACTION_DOWN:
+	        	// If user has pressed the screen but is not moving
+	            case MotionEvent.ACTION_DOWN: 
 	                if(velocity != null) 
-	                	 velocity.clear();
+	                	 velocity.clear(); //reset velocity tracker to its initial state
 	                    
-	                velocity = VelocityTracker.obtain();
+	                velocity = VelocityTracker.obtain(); // get new velocity tracker
 	                velocity.addMovement(e);
 	                break;
+	            // If pressed and changes happened in the position (dragged/moved)
 	            case MotionEvent.ACTION_MOVE:
 	                velocity.addMovement(e);
 	                velocity.computeCurrentVelocity(scrollSpeed);
 	                xVel =  VelocityTrackerCompat.getXVelocity(velocity, 
 	                        pointerId);
 	                break;
+	            // If not pressed
 	            case MotionEvent.ACTION_UP:
 	            	xVel = 0;
 	            	break;
+	            // Current gesture is aborted
 	            case MotionEvent.ACTION_CANCEL:
 	            	if(velocity != null)
-	            		velocity.recycle();
+	            		velocity.recycle(); //recycle so that it can be reused
 	                break;
 	        }
 			return true;

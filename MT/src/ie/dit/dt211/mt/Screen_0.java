@@ -21,19 +21,7 @@ import android.widget.TextView;
 
 public class Screen_0 extends Activity implements OnClickListener
 {
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) 
-	{
-		if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-		{
-			Intent intent = new Intent(Intent.ACTION_MAIN);
-			intent.addCategory(Intent.CATEGORY_HOME);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-		}
-		// TODO Auto-generated method stub
-		return super.onKeyDown(keyCode, event);
-	}
+	
 
 	private Button create, list, quit, about, ok;
 	private Dialog dialog;
@@ -180,7 +168,19 @@ public class Screen_0 extends Activity implements OnClickListener
 		return super.onOptionsItemSelected(item);
 	}
 
-	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+		if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+		{
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
+		// TODO Auto-generated method stub
+		return super.onKeyDown(keyCode, event);
+	}
 
 	
 }
